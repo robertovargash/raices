@@ -86,7 +86,7 @@
                     <strong>Almacén: </strong> {{ $vale->almacen_id }}
                 </div>
                 <div class="Column">
-                    <strong>Vale No.: </strong> {{ $vale->id }}
+                    <strong>Vale No.: </strong> {{ $vale->numero }}
                 </div>
                 <div class="Column">
                     <strong>Emisión: </strong> {{ date('d-m-Y', strtotime($vale->fecha)) }}

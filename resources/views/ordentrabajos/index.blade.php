@@ -37,7 +37,7 @@
                       <tbody>
                         @foreach ($ordentrabajos as $ot)
                         <tr>
-                            <td>{{ $ot->id }}</td>
+                            <td>{{ $ot->numero }}</td>
                             <td>
                                 @switch($ot->estado)
                                     @case(0)

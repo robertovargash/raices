@@ -62,6 +62,8 @@ class ValeController extends Controller
     public function store(Request $request)
     {
         $valeNuevo = Vale::create($request->all());
+        $valeNuevo->numero = Vale::count();
+        $valeNuevo->save();
         if ($valeNuevo->tipovale == 1) {
            foreach ($valeNuevo->ordentrabajo->tproducto->materiaprimas as $key => $materiaprima) {
                 $almacenmercancia = Almacenmercancia::where('almacenmercancias.mercancia_id','=',$materiaprima->mercancia_id)
@@ -178,8 +180,7 @@ class ValeController extends Controller
 
         $almacen = $vale->almacen;
         $url = URL::route('almacens.edit',$almacen) . '#cardVales';
-
-        return Redirect::to($url)->with('success','Vale modificado');;
+        return Redirect::to($url)->with('success','Vale modificado');
     }
 
 
@@ -192,9 +193,11 @@ class ValeController extends Controller
             $vale->activo = 1;
             $vale->p_autoriza = Auth::user()->name;
             $vale->save();
-            return redirect()->route('almacens.edit',$almacen)->with('success','Vale firmado');
+            $url = URL::route('almacens.edit',$almacen) . '#cardVales';
+            return Redirect::to($url)->with('success','Vale firmado');
         }else{
-            return redirect()->route('almacens.edit',$almacen)->with('error','No se puede firmar, no esta en proceso');
+            $url = URL::route('almacens.edit',$almacen) . '#cardVales';
+            return Redirect::to($url)->with('error','No se puede firmar, no esta en proceso');
         }
     }
 
@@ -244,11 +247,11 @@ class ValeController extends Controller
                 $vale_ordenTrabajo->estado = 0;//Cambio el estado de la OT a Proceso
             }
             $vale_ordenTrabajo->save();
-            return redirect()->route('almacens.edit',$almacen)->with('success','Vale cancelado');;
+            $url = URL::route('almacens.edit',$almacen) . '#cardVales';
+            return Redirect::to($url)->with('success','Vale cancelado');
         }else{
-            return redirect()->route('almacens.edit',$almacen)->with('error','No se puede cancelar, no esta en proceso');;
+            $url = URL::route('almacens.edit',$almacen) . '#cardVales';
+            return Redirect::to($url)->with('error','No se puede cancelar, no esta en proceso');
         }
     }
-
-
 }

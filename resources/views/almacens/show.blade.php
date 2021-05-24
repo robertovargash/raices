@@ -117,7 +117,7 @@
                       <tbody>
                         @foreach ($almacen->recepciones as $recepcion)
                         <tr>
-                          <td>{{ $recepcion->id }}</td>
+                          <td>{{ $recepcion->numero }}</td>
                           <td>{{ $recepcion->observaciones }}</td>
                           <td>{{ $recepcion->p_recibe }}</td>
                           <td>{{ $recepcion->p_entrega}} </td>
@@ -162,7 +162,7 @@
                       <tbody>
                         @foreach ($almacen->vales as $vale)
                         <tr>
-                          <td>{{ $vale->id }}</td>
+                          <td>{{ $vale->numero }}</td>
                           <td>{{ $vale->observaciones }}</td>
                           <td>{{ $vale->p_recibe }}</td>
                           <td>{{ $vale->p_entrega}} </td>

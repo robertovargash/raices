@@ -39,7 +39,7 @@
                       <tbody>
                         @foreach ($facturas as $factura)
                         <tr>
-                            <td>{{ $factura->id }}</td>
+                            <td>{{ $factura->numero }}</td>
                             @switch($factura->estado)
                               @case(0)
                                   <td><b>1-En proceso</b></td>

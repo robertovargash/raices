@@ -144,7 +144,7 @@
                 <tbody>
                   @foreach ($almacen->recepciones as $recepcion)
                   <tr>
-                    <td>{{ $recepcion->id }}</td>
+                    <td>{{ $recepcion->numero }}</td>
                     <td>
                         @switch($recepcion->activo)
                             @case(0)
@@ -222,7 +222,7 @@
                 <tbody>
                   @foreach ($almacen->vales as $vale)
                   <tr>
-                    <td>{{ $vale->id }}</td>
+                    <td>{{ $vale->numero }}</td>
                     <td>
                         @switch($vale->activo)
                             @case(0)

@@ -59,6 +59,8 @@ class SolicitudeController extends Controller
     public function store(Request $request)
     {
         $solicitude = Solicitude::create($request->all());
+        $solicitude->numero = Solicitude::count();
+        $solicitude->save();
         return redirect()->route('solicitudes.edit',$solicitude)->with('success', 'Solicitud insertada!!');
     }
 
@@ -205,6 +207,7 @@ class SolicitudeController extends Controller
                     $ot->tecnico ="Sin definir";
                     $ot->operario = "Sin definir";
                     $ot->cantidad = $solicitudproducto->cantidad;
+                    $ot->numero = Ordentrabajo::count() + 1;
                     $ot->save();
                 }
                 //Se crea el campo Ot solicitud,

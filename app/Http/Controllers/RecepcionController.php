@@ -5,13 +5,12 @@ use App\Http\Controllers\DB;
 use App\Models\Almacen;
 use App\Models\Almacenmercancia;
 use App\Models\Mercancia;
-use App\Models\Producto;
 use App\Models\Recepcion;
 use App\Models\Recepcionmercancia;
-use App\Models\Recepcionproducto;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB as FacadesDB;
 
 class RecepcionController extends Controller
 {
@@ -49,6 +48,8 @@ class RecepcionController extends Controller
     public function store(Request $request)
     {
         $recepcionNueva = Recepcion::create($request->all());
+        $recepcionNueva->numero = Recepcion::count();
+        $recepcionNueva->save();
         return redirect()->route('recepcions.edit',$recepcionNueva)->with('success','Recepción insertada.');
     }
 
@@ -99,8 +100,8 @@ class RecepcionController extends Controller
         $recepcion->update($request->all());
 
         $almacen = $recepcion->almacen;
-
-        return redirect()->route('almacens.edit',$almacen)->with('success','Recepción modificada.');
+        $url = URL::route('almacens.edit',$almacen) . '#cardRecepciones';
+        return Redirect::to($url)->with('success','Recepción modificada.');
     }
 
     /**
@@ -122,9 +123,11 @@ class RecepcionController extends Controller
         if ($recepcion->activo == 0) {
             $recepcion->activo = 2;//En ves de eliminar, cancelo
             $recepcion->save();
-            return redirect()->route('almacens.edit',$almacen)->with('success','Recepción cancelada');
+            $url = URL::route('almacens.edit',$almacen) . '#cardRecepciones';
+            return Redirect::to($url)->with('success','Recepción cancelada');
         }else{
-            return redirect()->route('almacens.edit',$almacen)->with('error','No se pudo cancelar, no esta en proceso');
+            $url = URL::route('almacens.edit',$almacen) . '#cardRecepciones';
+            return Redirect::to($url)->with('error','No se pudo cancelar, no esta en proceso');
         }
     }
 
@@ -154,9 +157,11 @@ class RecepcionController extends Controller
                 $mercancia->save();
             }
             $recepcion->save();
-            return redirect()->route('almacens.edit',$almacen)->with('success','Recepción firmada');
+            $url = URL::route('almacens.edit',$almacen) . '#cardRecepciones';
+            return Redirect::to($url)->with('success','Recepción firmada');
         }else{
-            return redirect()->route('almacens.edit',$almacen)->with('error','No se pudo firmar, no esta en proceso');
+            $url = URL::route('almacens.edit',$almacen) . '#cardRecepciones';
+            return Redirect::to($url)->with('error','No se pudo firmar, no esta en proceso');
         }
     }
 }

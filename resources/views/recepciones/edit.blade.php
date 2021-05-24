@@ -7,7 +7,7 @@
         <div class="col-sm-6">
           <div class="col-lg-12 margin-tb">
             <div class="pull-left">
-              <h2>Datos recepción No. {{ $recepcion->id }}</h2>
+              <h2>Datos recepción No. {{ $recepcion->numero }}</h2>
             </div>
             <div class="pull-right">
                 <a class="btn btn-primary" href="{{ route('almacens.edit',$recepcion->almacen) }}"> Atrás</a>
@@ -33,7 +33,7 @@
         <div class="col-12">
           <div class="card card-default">
             <div class="card-header">
-              <h3 class="card-title">Datos recepción No. {{ $recepcion->id }}</h3>
+              <h3 class="card-title">Datos recepción No. {{ $recepcion->numero }}</h3>
               <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
               </div>
@@ -46,7 +46,6 @@
                     @method('PUT')
                     <div class="row">
                         <input type="hidden" name="activo" value="0" class="form-control">
-                        <input type="hidden" name="numero" value="{{ $recepcion->id }}" id="idNumero" class="form-control">
                         <div class="col-xs-12 col-sm-6 col-md-6">
                           <div class="form-group">
                             <strong>Fecha: </strong>

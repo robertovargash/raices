@@ -49,6 +49,8 @@ class FacturaController extends Controller
     public function store(Request $request)
     {
         $factura = Factura::create($request->all());
+        $factura->numero = Factura::count();
+        $factura->save();
         return redirect()->route('facturas.edit',$factura)->with('success', 'Factura insertada!!');
     }
 

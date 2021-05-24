@@ -39,7 +39,7 @@
                       <tbody>
                         @foreach ($solicitudes as $solicitude)
                         <tr>
-                            <td>{{ $solicitude->id }}</td>
+                            <td>{{ $solicitude->numero }}</td>
                             @switch($solicitude->estado)
                               @case(0)
                                   <td><b>1-En proceso</b></td>

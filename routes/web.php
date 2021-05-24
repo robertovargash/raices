@@ -50,7 +50,7 @@ Route::group(['middleware' => 'prevent-back-history'],function(){
 
 
         Route::resource('recepcions','RecepcionController');
-        Route::delete('recepcion_delete_modal', 'RecepcionController@cancelar')->name('recepcions.cancelar');
+        Route::put('recepcion_cancelar_modal', 'RecepcionController@cancelar')->name('recepcions.cancelar');
         Route::put('recepcion_firmar_modal', 'RecepcionController@firmar')->name('recepcions.firmar');
 
         Route::resource('recepcionmercancias','RecepcionmercanciaController');
@@ -78,7 +78,6 @@ Route::group(['middleware' => 'prevent-back-history'],function(){
         Route::resource('fiinfracuentas','FiinfracuentaController');
         Route::get('fiinfracuentas/get_by_subcuenta/{fisubcuenta_id}', 'FiinfracuentaController@get_by_subcuenta')->name('fiinfracuentas.get_by_subcuenta');
         Route::delete('analisis_delete_modal', 'FiinfracuentaController@destroy')->name('fiinfracuentas.destroy');
-
 
         Route::resource('clasificadorcuentas','ClasificadorcuentaController');
         Route::delete('clasificadorcuenta_delete_modal', 'ClasificadorcuentaController@destroy')->name('clasificadorcuentas.destroy');
