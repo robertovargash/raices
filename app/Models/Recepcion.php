@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Recepcion extends Model
 {
     protected $fillable = [
-        'almacen_id','numero', 'observaciones', 'p_recibe', 'p_entrega', 'p_autoriza','fecha', 'activo','factura','proveedor'
+        'almacen_id','numero', 'observaciones', 'p_recibe', 'p_entrega', 'p_autoriza','fecha', 'activo','contrato','factura','conduce','scompra','manifiesto','partida','conocimiento','expedicion','casilla','bultos','tbultos','transportista','tci','tchapa','proveedor'
      ];
  
      //aqui se establecen las relaciones del ORM Eloquent

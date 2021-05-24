@@ -199,7 +199,7 @@
                     <div class="col-12">
                         <div class="form-group">
                         <strong for="selectProductos">Producto:</strong>
-                        <select id="selectProductos" class="form-control select2bs4" onchange="refrescar_precio_cantidad_descripcion()">
+                        <select id="selectProductos" class="form-control select2bs4" onchange="refrescar_precio_cantidad_descripcion()" style="width: 100%;">
                             <option value="" selected="selected" hidden="hidden">Selecciona producto</option>
                             @foreach ($tproductos as $tproducto)
                                 <option valor="{{ $tproducto->valorbruto }}" value="{{$tproducto->nombre}}">{{$tproducto->nombre}}</option>

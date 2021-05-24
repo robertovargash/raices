@@ -189,7 +189,7 @@
             <div class="col-12">
                 <div class="form-group">
                   <strong>Cliente:</strong>*
-                  <select id="cliente_id" class="form-control select2bs4" name="cliente_id">
+                  <select id="cliente_id" class="form-control select2bs4" name="cliente_id" style="width: 100%;">
                       <option value="" selected="selected" disabled hidden="hidden">Selecciona el cliente</option>
                       @foreach ($clientes as $cliente)
                           <option value="{{$cliente->id}}">{{$cliente->siglas}} {{ $cliente->nombre }}</option>

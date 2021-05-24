@@ -215,7 +215,7 @@
                     <div class="col-12">
                         <div class="form-group">
                         <strong for="selectProductos">Producto:</strong>
-                        <select id="selectProductos" class="form-control select2bs4" name="tproducto_id" onchange="refrescar_precio_cantidad()">
+                        <select id="selectProductos" class="form-control select2bs4" name="tproducto_id" onchange="refrescar_precio_cantidad()" style="width: 100%;">
                             <option value="" selected="selected" hidden="hidden">Selecciona producto</option>
                             @foreach ($tproductos as $tproducto)
                                 @if ($tproducto->existe == 0)

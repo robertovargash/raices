@@ -114,7 +114,7 @@
               <div class="col-12">
                 <div class="form-group">
                   <strong for="cuenta">Cuenta:</strong>
-                  <select id="cuenta" class="form-control select2bs4" name="ficuenta_id">
+                  <select id="cuenta" class="form-control select2bs4" name="ficuenta_id" style="width: 100%;">
                       <option value="" selected="selected" hidden="hidden">Selecciona cuenta</option>
                       @foreach ($cuentas as $cuenta)
                           <option value="{{$cuenta->id}}">{{$cuenta->numero}} ({{ $cuenta->descripcion }})</option>
@@ -125,7 +125,7 @@
               <div class="col-12">
                 <div class="form-group">
                   <strong for="subcuenta">Subcuenta:</strong>
-                  <select id="subcuenta" class="form-control select2bs4" name="fisubcuenta_id" disabled="true">
+                  <select id="subcuenta" class="form-control select2bs4" name="fisubcuenta_id" disabled="true" style="width: 100%;">
                       <option value="" selected="selected" hidden="hidden">Selecciona cuenta primero</option>
                   </select>
                 </div>
@@ -134,7 +134,7 @@
               <div class="col-12">
                 <div class="form-group">
                   <strong for="analisis">Análisis:</strong>
-                  <select id="analisis" class="form-control select2bs4" name="fiinfracuenta_id" disabled="true">
+                  <select id="analisis" class="form-control select2bs4" name="fiinfracuenta_id" disabled="true" style="width: 100%;">
                       <option value="" selected="selected" hidden="hidden">Selecciona subcuenta primero</option>
                   </select>
                 </div>
@@ -142,7 +142,7 @@
               <div class="col-12">
                 <div class="form-group">
                   <strong for="my-select2">Clasificación:</strong>
-                  <select id="id" class="form-control select2bs4" name="clasificacion_id">
+                  <select id="id" class="form-control select2bs4" name="clasificacion_id" style="width: 100%;">
                       <option value="" selected="selected" hidden="hidden">Selecciona clasificación</option>
                       @foreach ($clasificaciones as $clasificacion)
                           <option value="{{$clasificacion->id}}">{{$clasificacion->clasificacion}}</option>

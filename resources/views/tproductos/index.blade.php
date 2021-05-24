@@ -137,7 +137,7 @@
               <div class="col-12">
                 <div class="form-group">
                   <strong>Tipo:</strong>
-                  <select id="tipo" class="form-control select2bs4" name="tipotproducto_id">
+                  <select id="tipo" class="form-control select2bs4" name="tipotproducto_id" style="width: 100%;">
                       <option value="" selected="selected" hidden="hidden">Selecciona tipo de producto</option>
                       @foreach ($tipotproductos as $tipo)
                           <option value="{{$tipo->id}}">{{$tipo->tipo}}</option>

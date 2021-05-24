@@ -226,7 +226,7 @@
                 <div class="col-12">
                   <div class="form-group">
                     <strong for="my-select2">Mercancía:</strong>
-                    <select id="idselectmercancia" class="form-control select2bs4" name="mercancia_id" onchange="colocar_precio()">
+                    <select id="idselectmercancia" class="form-control select2bs4" name="mercancia_id" onchange="colocar_precio()" style="width: 100%;">
                         <option value="" selected="selected" hidden="hidden">Selecciona mercancía</option>
                         @foreach ($mercancias as $mercancia)
                             @if ($mercancia->existe == 0)

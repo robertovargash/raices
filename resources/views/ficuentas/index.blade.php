@@ -127,7 +127,7 @@
                   <div class="col-12">
                     <div class="form-group">
                       <strong>Clasificador:</strong>
-                      <select class="form-control select2bs4" name="clasificadorcuenta_id">
+                      <select class="form-control select2bs4" name="clasificadorcuenta_id" style="width: 100%;">
                           <option value="" selected="selected" hidden="hidden">Selecciona clasificador de cuenta</option>
                           @foreach ($clasificadores as $clasif)
                               <option value="{{$clasif->id}}">{{$clasif->clasificacion}}</option>

@@ -213,7 +213,7 @@
                 <div class="col-12">
                   <div class="form-group">
                     <strong for="my-select2">Mercancía:</strong>
-                    <select id="idselect2" class="form-control select2bs4" name="mercancia_id">
+                    <select id="idselect2" class="form-control select2bs4" name="mercancia_id" style="width: 100%;">
                         <option value="" selected="selected" hidden="hidden">Selecciona mercancía</option>
                         @foreach ($mercancias as $mercancia)
                             <option value="{{$mercancia->id}}">{{$mercancia->codigo}} | {{$mercancia->nombremercancia}} | {{$mercancia->um}} | {{$mercancia->clasificacion->clasificacion}}</option>

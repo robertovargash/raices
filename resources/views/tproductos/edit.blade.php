@@ -70,7 +70,7 @@
                     <div class="col-12">
                         <div class="form-group">
                           <strong>Tipo:</strong>
-                          <select id="tipo" class="form-control select2bs4" name="tipotproducto_id">
+                          <select id="tipo" class="form-control select2bs4" name="tipotproducto_id" style="width: 100%;">
                               <option value="" selected="selected" hidden="hidden">Selecciona tipo de producto</option>
                               @foreach ($tipotproductos as $tipo)
                                   <option value="{{$tipo->id}}" {{ $tproducto->tipotproducto_id == $tipo->id ? ' selected ' : '' }}>{{$tipo->tipo}}</option>
@@ -194,7 +194,7 @@
                     <div class="col-12">
                      <div class="form-group">
                         <strong for="my-select2">Materia prima (mercancía):</strong>
-                        <select id="idselectProducto" class="form-control select2bs4" name="mercancia_id" onchange="colocar_precio()">
+                        <select id="idselectProducto" class="form-control select2bs4" name="mercancia_id" onchange="colocar_precio()" style="width: 100%;">
                             <option value="" selected="selected" hidden="hidden">Selecciona mercancía</option>
                             @foreach ($mercancias as $mercancia)
                                 <option value="{{$mercancia->mercancia->id}}" precio="{{$mercancia->precio}}">{{$mercancia->mercancia->codigo}} | {{$mercancia->mercancia->nombremercancia}} | {{$mercancia->mercancia->um}} | {{$mercancia->mercancia->clasificacion->clasificacion}}</option>
