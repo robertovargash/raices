@@ -46,48 +46,96 @@
                     @method('PUT')
                     <div class="row">
                         <input type="hidden" name="activo" value="0" class="form-control">
-                        <div class="col-xs-12 col-sm-6 col-md-6">
-                          <div class="form-group">
-                            <strong>Fecha: </strong>
-                            {{ date('d/m/Y', strtotime($recepcion->fecha)) }}
-                          </div>
+                        <div class="col-12 form-group">
+                          <strong>Fecha: </strong>
+                          {{ date('d/m/Y', strtotime($recepcion->fecha)) }}
                         </div>
-                        <div class="col-12">
-                          <div class="form-group">
-                              <strong>Factura ref. *:</strong>
-                              <input type="text" name="factura" value="{{ $recepcion->factura }}" class="form-control" placeholder="Factura">
-                          </div>
+                        <div class="col-12 form-group">
+                          <strong>Proveedor ref. *:</strong>
+                          <input type="text" name="proveedor" value="{{ $recepcion->proveedor }}" class="form-control" placeholder="Proveedor">
                         </div>
-                        <div class="col-12">
-                          <div class="form-group">
-                              <strong>Proveedor ref. *:</strong>
-                              <input type="text" name="proveedor" value="{{ $recepcion->proveedor }}" class="form-control" placeholder="Proveedor">
-                          </div>
+                        <div class="col-12 form-group">
+                          <strong>No. Contrato:</strong>*
+                          <input type="text" name="contrato" value="{{ $recepcion->contrato }}" class="form-control" placeholder="Contrato">
                         </div>
-
-                        <div class="col-12">
-                            <div class="form-group">
-                                <strong>Recibe (*):</strong>
-                                <input type="text" name="p_recibe" value="{{ $recepcion->p_recibe }}" id="idp_recibe" class="form-control" placeholder="Recibe">
+                        <div class="col-12 form-group">
+                          <strong>Factura ref. *:</strong>
+                          <input type="text" name="factura" value="{{ $recepcion->factura }}" class="form-control" placeholder="Factura">
+                        </div>
+                        
+                        <div class="col-12 form-group">
+                          <strong>Recibe (*):</strong>
+                          <input type="text" name="p_recibe" value="{{ $recepcion->p_recibe }}" id="idp_recibe" class="form-control" placeholder="Recibe">
+                        </div>
+                          <div class="col-12 form-group">
+                            <strong>Entrega (*):</strong>
+                            <input type="text" name="p_entrega" value="{{ $recepcion->p_entrega }}" id="idp_entrega" class="form-control" placeholder="Entrega">
+                          </div>
+                          <div class="col-12 form-group">
+                            <strong>Autoriza:</strong>
+                            <input type="text" readonly name="p_autoriza" value="{{ $recepcion->p_autoriza }}" id="idp_autoriza" class="form-control" placeholder="Autoriza">
+                          </div>
+                        <div class="col-12 form-group">
+                          <strong>Observaciones:</strong>
+                          <textarea class="form-control" style="height:150px" name="observaciones" placeholder="Observaciones">{{ $recepcion->observaciones }}</textarea>
+                        </div>
+                        <div class="card" style="width: 100%">
+                          <div class="card-header">
+                            <h3 class="card-title">Otros datos</h3>
+                            <div class="card-tools">
+                              <button type="button" id="cardDataRecepcion" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button>
                             </div>
                           </div>
-                          <div class="col-12">
-                            <div class="form-group">
-                                <strong>Entrega (*):</strong>
-                                <input type="text" name="p_entrega" value="{{ $recepcion->p_entrega }}" id="idp_entrega" class="form-control" placeholder="Entrega">
+                          <div class="card-body">
+                            <div class="col-12 form-group">
+                              <strong>Conduce No.:</strong>
+                              <input type="text" name="conduce" value="{{ $recepcion->conduce }}" class="form-control" placeholder="Conduce No.">
+                            </div>
+                            <div class="col-12 form-group">
+                              <strong>No. Solicitud de Compra:</strong>
+                              <input type="text" name="scompra" value="{{ $recepcion->scompra }}" class="form-control" placeholder="No. Solicitud">
+                            </div>
+                            <div class="col-12 form-group">
+                              <strong>Manifiesto:</strong>
+                              <input type="text" name="manifiesto" value="{{ $recepcion->manifiesto }}" class="form-control" placeholder="Manifiesto">
+                            </div>
+                            <div class="col-12 form-group">
+                              <strong>No. Partida:</strong>
+                              <input type="text" name="partida" value="{{ $recepcion->partida }}" class="form-control" placeholder="No. Partida">
+                            </div>
+                            <div class="col-12 form-group">
+                              <strong>Conocimiento Embarque:</strong>
+                              <input type="text" name="conocimiento" value="{{ $recepcion->conocimiento }}" class="form-control" placeholder="Conc. Embarque">
+                            </div>
+                            <div class="col-12 form-group">
+                              <strong>Orden de expedición:</strong>
+                              <input type="text" name="expedicion" value="{{ $recepcion->expedicion }}" class="form-control" placeholder="Expedición">
+                            </div>
+                            <div class="col-12 form-group">
+                              <strong>Casilla ferrocarril:</strong>
+                              <input type="text" name="casilla" value="{{ $recepcion->casilla }}" class="form-control" placeholder="Casilla">
+                            </div>
+                            <div class="col-12 form-group">
+                              <strong>Cant. Bultos:</strong>
+                              <input type="number" name="bultos" value="{{ $recepcion->bultos }}" class="form-control" placeholder="# Bultos">
+                            </div>
+                            <div class="col-12 form-group">
+                              <strong>Tipo de bultos:</strong>
+                              <input type="text" name="tbultos" value="{{ $recepcion->tbultos }}" class="form-control" placeholder="Tipo bultos">
+                            </div>
+                            <div class="col-12 form-group">
+                              <strong>Nombre transportista:</strong>
+                              <input type="text" name="transportista" value="{{ $recepcion->transportista }}" class="form-control" placeholder="Transportista">
+                            </div>
+                            <div class="col-12 form-group">
+                              <strong>CI de transportista:</strong>
+                              <input type="text" name="tci" value="{{ $recepcion->tci }}" class="form-control" placeholder="Carné de Id.">
+                            </div>
+                            <div class="col-12 form-group">
+                              <strong>Chapa vehículo:</strong>
+                              <input type="text" name="tchapa" value="{{ $recepcion->tchapa }}" class="form-control" placeholder="Chapa">
                             </div>
                           </div>
-                          <div class="col-12">
-                            <div class="form-group">
-                                <strong>Autoriza:</strong>
-                                <input type="text" readonly name="p_autoriza" value="{{ $recepcion->p_autoriza }}" id="idp_autoriza" class="form-control" placeholder="Autoriza">
-                            </div>
-                          </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <strong>Observaciones:</strong>
-                                <textarea class="form-control" style="height:150px" name="observaciones" placeholder="Observaciones">{{ $recepcion->observaciones }}</textarea>
-                            </div>
                         </div>
                         <div class="col-12 text-center">
                             <button type="submit" class="btn btn-success btn-block">Actualizar</button>
@@ -315,6 +363,10 @@ $(document).on('click','.deleteRecepcionProducto',function(){
     };
     $('#recepcionData').validate({
       rules: {
+        contrato: {
+          required: true,
+          maxlength: 50,
+        },
         factura: {
           required: true,
           maxlength: 50,
@@ -337,8 +389,52 @@ $(document).on('click','.deleteRecepcionProducto',function(){
         observaciones: {
           required: true,
         },
+        conduce: {
+          required: false,
+          maxlength: 50,
+        },
+        scompra: {
+          required: false,
+          maxlength: 50,
+        },
+        manifiesto: {
+          required: false,
+          maxlength: 50,
+        },
+        partida: {
+          required: false,
+          maxlength: 50,
+        },
+        conocimiento: {
+          required: false,
+          maxlength: 50,
+        },
+        expedicion: {
+          required: false,
+          maxlength: 50,
+        },
+        casilla: {
+          required: false,
+          maxlength: 50,
+        },
+        transportista: {
+          required: false,
+          maxlength: 250,
+        },
+        tci: {
+          required: false,
+          maxlength: 11,
+        },
+        tchapa: {
+          required: false,
+          maxlength: 50,
+        },
       },
       messages: {
+        contrato: {
+          required: "Debe insertar el numero de contrato como referencia",
+          maxlength: "Máximo 50 caracteres",
+        },
         factura: {
           required: "Debe insertar el numero de factura como referencia",
           maxlength: "Máximo 50 caracteres",
@@ -360,7 +456,37 @@ $(document).on('click','.deleteRecepcionProducto',function(){
         },
         observaciones: {
           required: "Escriba un comentario",
-        }
+        },
+        conduce: {
+          maxlength: "Máximo 50 caracteres ",
+        },
+        scompra: {
+          maxlength: "Máximo 50 caracteres ",
+        },
+        manifiesto: {
+          maxlength: "Máximo 50 caracteres ",
+        },
+        partida: {
+          maxlength: "Máximo 50 caracteres ",
+        },
+        conocimiento: {
+          maxlength: "Máximo 50 caracteres ",
+        },
+        expedicion: {
+          maxlength: "Máximo 50 caracteres ",
+        },
+        casilla: {
+          maxlength: "Máximo 50 caracteres ",
+        },
+        transportista: {
+          maxlength: "Máximo 250 caracteres ",
+        },
+        tci: {
+          maxlength: "Máximo 11 caracteres ",
+        },
+        tchapa: {
+          maxlength: "Máximo 50 caracteres ",
+        },
       },
       errorElement: 'span',
       errorPlacement: function (error, element) {

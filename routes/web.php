@@ -50,6 +50,7 @@ Route::group(['middleware' => 'prevent-back-history'],function(){
 
 
         Route::resource('recepcions','RecepcionController');
+        Route::get('recepcion_pdf/{recepcion}', 'RecepcionController@imprimir')->name('recepcions.imprimir');
         Route::put('recepcion_cancelar_modal', 'RecepcionController@cancelar')->name('recepcions.cancelar');
         Route::put('recepcion_firmar_modal', 'RecepcionController@firmar')->name('recepcions.firmar');
 

@@ -126,7 +126,7 @@
               <div class="pull-left mb-2">
                 {{-- <a class="btn btn-success" href="{{ route('recepciones.create') }}"> Adicionar</a> --}}
                 @can('gestion_recepcion')
-                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modalAddRecepcion">Adicionar</button>
+                    <button type="button" class="btn btn-info AddRecepcion">Adicionar</button>
                 @endcan
               </div>
               <table id="tablaRecepciones" class="table table-bordered table-striped">
@@ -164,6 +164,7 @@
                     <td>
                         <div class="d-inline">
                             <a href="{{ route('recepcions.show',$recepcion) }}" class="btn btn-link text-info">Detalles</a>
+                            <a href="{{ route('recepcions.imprimir',$recepcion) }}" class="btn btn-link text-info ">Imprimir</a>
                             @can('gestion_recepcion')
                                 <a href="{{ route('recepcions.edit',$recepcion) }}" class="btn btn-link text-primary" {{ $recepcion->activo != 0 ? 'hidden' : 'enabled'}}>{{-- <span class="fas fa-pencil-alt"> --}}Editar</a>
                                 <a class="btn btn-link deleteRecepcion text-danger" {{ $recepcion->activo != 0 ? 'hidden' : 'enabled'}} data-recepcion_id="{{$recepcion->id}}">Cancelar</a>
@@ -204,7 +205,7 @@
             <div class="card-body">
               <div class="pull-left mb-2">
                   @can('gestion_vale')
-                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modalAddvale">Adicionar</button>
+                    <button type="button" class="btn btn-warning Addvale">Adicionar</button>
                   @endcan
               </div>
               <table id="tablaVales" class="table table-bordered table-striped">
@@ -391,56 +392,99 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="row">
-          <form action="{{ route('recepcions.store') }}" id="recepcionData" method="POST">
-              @csrf
-               <div class="row">
-                <div class="col-12">
-                  <div class="form-group">
-                      <input type="hidden" name="almacen_id" value="{{ $almacen->id }}" class="form-control">
-                  </div>
-                </div>
-                <div class="col-12">
-                  <div class="form-group">
-                      <input type="hidden" name="numero" value="0" class="form-control" placeholder="Número">
-                  </div>
-                </div>
-                <div class="col-12">
-                  <div class="form-group">
-                      <strong>Factura ref. *:</strong>
-                      <input type="text" name="factura" class="form-control" placeholder="Factura">
-                  </div>
-                </div>
-                <div class="col-12">
-                  <div class="form-group">
-                      <strong>Proveedor ref. *:</strong>
-                      <input type="text" name="proveedor" class="form-control" placeholder="Proveedor">
-                  </div>
-                </div>
-                  <div class="col-12">
-                      <div class="form-group">
-                          <strong>Entrega *:</strong>
-                          <input type="text" name="p_entrega" class="form-control" placeholder="Entrega">
-                      </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="form-group">
-                        <strong>Recibe *:</strong>
-                        <input type="text" readonly name="p_recibe" value="{{ Auth::user()->name }}" class="form-control" placeholder="Recibe">
-                    </div>
-                  </div>
-                  <div class="col-12">
-                      <div class="form-group">
-                          <strong>Observaciones:</strong>
-                          <textarea class="form-control" style="height:150px" name="observaciones" placeholder="Observaciones"></textarea>
-                      </div>
-                  </div>
-                  <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                        <button type="submit" class="btn btn-success btn-block">Insertar</button>
-                  </div>
+        <form action="{{ route('recepcions.store') }}" id="recepcionData" method="POST">
+          @csrf
+           <div class="row">
+            <input type="hidden" name="almacen_id" value="{{ $almacen->id }}" class="form-control">
+            <input type="hidden" name="numero" value="0" class="form-control" placeholder="Número">
+            <div class="col-12 form-group">
+              <strong>Proveedor:</strong>*
+              <input type="text" name="proveedor" class="form-control" placeholder="Proveedor">
+            </div>
+            <div class="col-12 form-group">
+              <strong>No. Contrato:</strong>*
+              <input type="text" name="contrato" class="form-control" placeholder="Contrato">
+            </div>
+            <div class="col-12 form-group">
+              <strong>Factura:</strong>*
+              <input type="text" name="factura" class="form-control" placeholder="Factura">
+            </div>            
+            <div class="col-12 form-group">
+              <strong>Entrega *:</strong>
+              <input type="text" name="p_entrega" class="form-control" placeholder="Entrega">
+            </div>
+            <div class="col-12 form-group">
+              <strong>Recibe *:</strong>
+              <input type="text" readonly name="p_recibe" value="{{ Auth::user()->name }}" class="form-control" placeholder="Recibe">
+            </div>
+              <div class="col-12 form-group">
+                <strong>Observaciones:</strong>
+                <textarea class="form-control" style="height:150px" name="observaciones" placeholder="Observaciones"></textarea>
               </div>
-          </form>
-        </div>
+              
+            <div class="card" style="width: 100%">
+              <div class="card-header">
+                <h3 class="card-title">Otros datos</h3>
+                <div class="card-tools">
+                  <button type="button" id="cardDataRecepcion" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="col-12 form-group">
+                  <strong>Conduce No.:</strong>
+                  <input type="text" name="conduce" class="form-control" placeholder="Conduce No.">
+                </div>
+                <div class="col-12 form-group">
+                  <strong>No. Solicitud de Compra:</strong>
+                  <input type="text" name="scompra" class="form-control" placeholder="No. Solicitud">
+                </div>
+                <div class="col-12 form-group">
+                  <strong>Manifiesto:</strong>
+                  <input type="text" name="manifiesto" class="form-control" placeholder="Manifiesto">
+                </div>
+                <div class="col-12 form-group">
+                  <strong>No. Partida:</strong>
+                  <input type="text" name="partida" class="form-control" placeholder="No. Partida">
+                </div>
+                <div class="col-12 form-group">
+                  <strong>Conocimiento Embarque:</strong>
+                  <input type="text" name="conocimiento" class="form-control" placeholder="Conc. Embarque">
+                </div>
+                <div class="col-12 form-group">
+                  <strong>Orden de expedición:</strong>
+                  <input type="text" name="expedicion" class="form-control" placeholder="Expedición">
+                </div>
+                <div class="col-12 form-group">
+                  <strong>Casilla ferrocarril:</strong>
+                  <input type="text" name="casilla" class="form-control" placeholder="Casilla">
+                </div>
+                <div class="col-12 form-group">
+                  <strong>Cant. Bultos:</strong>
+                  <input type="number" name="bultos" class="form-control" placeholder="# Bultos">
+                </div>
+                <div class="col-12 form-group">
+                  <strong>Tipo de bultos:</strong>
+                  <input type="text" name="tbultos" class="form-control" placeholder="Tipo bultos">
+                </div>
+                <div class="col-12 form-group">
+                  <strong>Nombre transportista:</strong>
+                  <input type="text" name="transportista" class="form-control" placeholder="Transportista">
+                </div>
+                <div class="col-12 form-group">
+                  <strong>CI de transportista:</strong>
+                  <input type="text" name="tci" class="form-control" placeholder="Carné de Id.">
+                </div>
+                <div class="col-12 form-group">
+                  <strong>Chapa vehículo:</strong>
+                  <input type="text" name="tchapa" class="form-control" placeholder="Chapa">
+                </div>
+              </div>
+            </div>
+              <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+                    <button type="submit" id="btnInserRecepcion" class="btn btn-success btn-block">Insertar</button>
+              </div>
+          </div>
+      </form>
       </div>
     </div>
     <!-- /.modal-content -->
@@ -457,63 +501,57 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="row">
-          <form action="{{ route('vales.store') }}" id="valeData" method="POST">
-              @csrf
-               <div class="row">
-                    <div class="col-12">
-                        <div class="form-group">
-                            <input type="hidden" name="almacen_id" value="{{ $almacen->id }}" class="form-control">
-                        </div>
+        <form action="{{ route('vales.store') }}" id="valeData" method="POST">
+          @csrf
+           <div class="row">
+                <input type="hidden" name="almacen_id" value="{{ $almacen->id }}" class="form-control">
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong for="select2tipovale">Tipo vale</strong>
+                        <select id="select2tipovale" class="form-control" name="tipovale">
+                          <option value="1" selected>Vale para Órden de Trabajo</option>
+                          <option value="0" >Vale para Gastos</option>
+                        </select>
                     </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong for="select2tipovale">Tipo vale</strong>
-                            <select id="select2tipovale" class="form-control" name="tipovale">
-                              <option value="1" selected>Vale para Órden de Trabajo</option>
-                              <option value="0" >Vale para Gastos</option>
-                            </select>
-                        </div>
+                </div>
+                <div class="col-12" id="div_ordentrabajo">
+                    <div class="form-group">
+                        <strong for="select2ordentrabajo_id">Órden de trabajo</strong>
+                        <select id="select2ordentrabajo_id" class="form-control select2bs4" name="ordentrabajo_id" id="ordentrabajo_id" style="width: 100%;">
+                            <option value="0" selected="selected" disabled hidden="hidden">Selecciona una Órden de trabajo</option>
+                            @for ($i = 0; $i < $ordentrabajos->count(); $i++)
+                                @if ($i == 0)
+                                    <option value="{{ $ordentrabajos[$i]->id }}" selected>OT : {{ $ordentrabajos[$i]->id }} de {{ $ordentrabajos[$i]->tproducto->nombre }}</option>
+                                @else
+                                    <option value="{{ $ordentrabajos[$i]->id }}">OT : {{ $ordentrabajos[$i]->id }} de {{ $ordentrabajos[$i]->tproducto->nombre }}</option>
+                                @endif
+                            @endfor
+                        </select>
+                      </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Entrega *:</strong>
+                        <input type="text" name="p_entrega" class="form-control" placeholder="Entrega">
                     </div>
-                    <div class="col-12" id="div_ordentrabajo">
-                        <div class="form-group">
-                            <strong for="select2ordentrabajo_id">Órden de trabajo</strong>
-                            <select id="select2ordentrabajo_id" class="form-control select2bs4" name="ordentrabajo_id" id="ordentrabajo_id" style="width: 100%;">
-                                <option value="0" selected="selected" disabled hidden="hidden">Selecciona una Órden de trabajo</option>
-                                @for ($i = 0; $i < $ordentrabajos->count(); $i++)
-                                    @if ($i == 0)
-                                        <option value="{{ $ordentrabajos[$i]->id }}" selected>OT : {{ $ordentrabajos[$i]->id }} de {{ $ordentrabajos[$i]->tproducto->nombre }}</option>
-                                    @else
-                                        <option value="{{ $ordentrabajos[$i]->id }}">OT : {{ $ordentrabajos[$i]->id }} de {{ $ordentrabajos[$i]->tproducto->nombre }}</option>
-                                    @endif
-                                @endfor
-                            </select>
-                          </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Solicita *:</strong>
+                        <input type="text" readonly name="p_solicita" value="{{ Auth::user()->name }}" class="form-control" placeholder="Solicita">
                     </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Entrega *:</strong>
-                            <input type="text" name="p_entrega" class="form-control" placeholder="Entrega">
-                        </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Observaciones:</strong>
+                        <textarea class="form-control" style="height:150px" name="observaciones" id="valeObservaciones" placeholder="Observaciones">Vale de Orden de Trabajo</textarea>
                     </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Solicita *:</strong>
-                            <input type="text" readonly name="p_solicita" value="{{ Auth::user()->name }}" class="form-control" placeholder="Solicita">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Observaciones:</strong>
-                            <textarea class="form-control" style="height:150px" name="observaciones" id="valeObservaciones" placeholder="Observaciones">Vale de Orden de Trabajo</textarea>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                        <button type="submit" class="btn btn-success btn-block">Insertar</button>
-                    </div>
-              </div>
-          </form>
-        </div>
+                </div>
+                <div class="col-12 text-center">
+                    <button type="submit" id="btnInserVale" class="btn btn-success btn-block">Insertar</button>
+                </div>
+          </div>
+      </form>
       </div>
     </div>
     <!-- /.modal-content -->
@@ -523,7 +561,29 @@
 @endsection
 @section('scripts')
 <script type="text/javascript">
+$(document).on('click','.AddRecepcion',function(){
+  $('#btnInserRecepcion').attr('disabled', false);
+  $('#btnInserRecepcion').html('Insertar');
+  $('#modalAddRecepcion').modal('show');
+});
+$(document).on('click','.Addvale',function(){
+  $('#btnInserVale').attr('disabled', false);
+  $('#btnInserVale').html('Insertar');
+  $('#modalAddvale').modal('show');
+});
   $(document).ready(function () {
+    $('#btnInserRecepcion').click(function () {
+            $('#btnInserRecepcion').attr('disabled', true);
+            $('#btnInserRecepcion').html('Insertando...');
+            $('#recepcionData').submit();
+            return true;
+        });
+    $('#btnInserVale').click(function () {
+            $('#btnInserVale').attr('disabled', true);
+            $('#btnInserVale').html('Insertando...');
+            $('#valeData').submit();
+            return true;
+        });
     $('#almacenData').validate({
       rules: {
         almacen: {
@@ -551,8 +611,52 @@
     });
     $('#recepcionData').validate({
       rules: {
+        contrato: {
+          required: true,
+          maxlength: 50,
+        },
         factura: {
           required: true,
+          maxlength: 50,
+        },
+        conduce: {
+          required: false,
+          maxlength: 50,
+        },
+        scompra: {
+          required: false,
+          maxlength: 50,
+        },
+        manifiesto: {
+          required: false,
+          maxlength: 50,
+        },
+        partida: {
+          required: false,
+          maxlength: 50,
+        },
+        conocimiento: {
+          required: false,
+          maxlength: 50,
+        },
+        expedicion: {
+          required: false,
+          maxlength: 50,
+        },
+        casilla: {
+          required: false,
+          maxlength: 50,
+        },
+        transportista: {
+          required: false,
+          maxlength: 250,
+        },
+        tci: {
+          required: false,
+          maxlength: 11,
+        },
+        tchapa: {
+          required: false,
           maxlength: 50,
         },
         proveedor: {
@@ -575,9 +679,43 @@
         },
       },
       messages: {
+        contrato: {
+          required: "Inserte el número de contrato",
+          maxlength: 50,
+        },
         factura: {
           required: "Debe insertar el numero de factura como referencia",
           maxlength: "Máximo 50 caracteres",
+        },
+        conduce: {
+          maxlength: "Máximo 50 caracteres ",
+        },
+        scompra: {
+          maxlength: "Máximo 50 caracteres ",
+        },
+        manifiesto: {
+          maxlength: "Máximo 50 caracteres ",
+        },
+        partida: {
+          maxlength: "Máximo 50 caracteres ",
+        },
+        conocimiento: {
+          maxlength: "Máximo 50 caracteres ",
+        },
+        expedicion: {
+          maxlength: "Máximo 50 caracteres ",
+        },
+        casilla: {
+          maxlength: "Máximo 50 caracteres ",
+        },
+        transportista: {
+          maxlength: "Máximo 250 caracteres ",
+        },
+        tci: {
+          maxlength: "Máximo 11 caracteres ",
+        },
+        tchapa: {
+          maxlength: "Máximo 50 caracteres ",
         },
         proveedor: {
           required: "Debe insertar el proveedor como referencia",

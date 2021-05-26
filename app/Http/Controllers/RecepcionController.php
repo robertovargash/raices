@@ -6,11 +6,13 @@ use App\Models\Almacen;
 use App\Models\Almacenmercancia;
 use App\Models\Mercancia;
 use App\Models\Recepcion;
+use App\Models\Proveedor;
 use App\Models\Recepcionmercancia;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class RecepcionController extends Controller
 {
@@ -131,6 +133,28 @@ class RecepcionController extends Controller
         }
     }
 
+    public function imprimir(Recepcion $recepcion)
+    {
+        //este funciona bien, pero solo en chrome
+        $title = "IRM ".$recepcion->id;
+        // return view('vales.valepdf',compact('title','vale','mercancias'));
+        $importetotal = 0;
+        $proveedor = Proveedor::first();
+        foreach ($recepcion->recepcionmercancias as $key => $item) {
+            foreach ($recepcion->almacen->almacenmercancias as $key => $mercancia) {
+                if ($mercancia->mercancia_id === $item->mercancia_id) {
+                    $item->existencia = $mercancia->cantidad;
+                }
+            }
+            $item->importe = round(($item->precio * $item->cantidad),2);
+            $importetotal = $importetotal + round(($item->precio * $item->cantidad),2);
+        }
+         $pdf = PDF::setOptions([
+            'logOutputFile' => storage_path('logs/log.htm'),
+            'tempDir' => storage_path('logs/')
+        ])->loadView('recepciones.pdf', compact('title','recepcion','proveedor','importetotal'));
+    	 return $pdf->setPaper('chart','landscape')->stream('IRM'.$recepcion->id.'.pdf');
+    }
 
     public function firmar(Request $request)
     {
