@@ -6,6 +6,8 @@ use App\Models\Ordentrabajo;
 use App\Models\Otsolicitude;
 use App\Models\Solicitude;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Redirect;
 
 class OtsolicitudeController extends Controller
 {
@@ -120,7 +122,10 @@ class OtsolicitudeController extends Controller
                 $ordentrabajo->save();
                 return redirect()->route('ordentrabajos.index')->with('success','Producto de la(s) solicitud(es) marcado(s) como terminado(s).');
             }
-            return redirect()->route('ordentrabajos.edit',$otsolicitude->ordentrabajo)->with('success','Producto de la(s) solicitud(es) marcado(s) como terminado(s).');
+            // return redirect()->route('ordentrabajos.edit',$otsolicitude->ordentrabajo)->with('success','Producto de la(s) solicitud(es) marcado(s) como terminado(s).');
+
+            $url = URL::route('ordentrabajos.edit',$otsolicitude->ordentrabajo) . '#cardProductos';
+            return Redirect::to($url)->with('success','Producto de la(s) solicitud(es) marcado(s) como terminado(s).');
         }else{
             return redirect()->route('ordentrabajos.edit',$otsolicitude->ordentrabajo)->with('error','Ya está terminado');
         }

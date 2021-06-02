@@ -99,6 +99,7 @@ Route::group(['middleware' => 'prevent-back-history'],function(){
         Route::put('solicitudes_cancelar_modal', 'SolicitudeController@cancelar')->name('solicitudes.cancelar');
         Route::put('solicitudes_confirmar_modal', 'SolicitudeController@confirmar')->name('solicitudes.confirmar');
         Route::put('solicitudes_entregar_modal', 'SolicitudeController@entregar')->name('solicitudes.entregar');
+        Route::get('solicitude_pdf/{solicitude}', 'SolicitudeController@pdf')->name('solicitudes.pdf');
         Route::resource('solicitudes','SolicitudeController');
 
         // Route::delete('solicitude_delete_modal', 'SolicitudeController@destroy')->name('solicitudes.destroy');
@@ -109,6 +110,7 @@ Route::group(['middleware' => 'prevent-back-history'],function(){
 
         Route::put('ordentrabajos_cancelar_modal', 'OrdentrabajoController@cancelar')->name('ordentrabajos.cancelar');
         Route::put('ordentrabajos_terminar_modal', 'OrdentrabajoController@terminar')->name('ordentrabajos.terminar');
+        Route::get('ordentrabajos_pdf/{ot}', 'OrdentrabajoController@pdf')->name('ordentrabajos.pdf');
         Route::resource('ordentrabajos','OrdentrabajoController');
 
         Route::resource('otsolicitudes','OtsolicitudeController');
@@ -133,7 +135,6 @@ Route::group(['middleware' => 'prevent-back-history'],function(){
         Route::delete('cuentasbancariascliente_delete_modal', 'CuentasbancariasclienteController@destroy')->name('cuentasbancariasclientes.destroy');
 
         Route::resource('proveedors','ProveedorController');
-
         Route::resource('proveedorcuentas','ProveedorcuentaController');
         Route::put('proveedorcuenta_edit_modal', 'ProveedorcuentaController@editar')->name('proveedorcuentas.editar');
         Route::delete('proveedorcuenta_delete_modal', 'ProveedorcuentaController@destroy')->name('proveedorcuentas.destroy');
@@ -142,12 +143,14 @@ Route::group(['middleware' => 'prevent-back-history'],function(){
         Route::put('facturas_firmar_modal', 'FacturaController@firmar')->name('facturas.firmar');
         Route::put('facturas_pagar_modal', 'FacturaController@pagar')->name('facturas.pagar');
         Route::get('factura_pdf/{factura}', 'FacturaController@imprimir')->name('facturas.imprimir');
+        Route::put('facturas_importar/{factura}', 'FacturaController@importar')->name('facturas.importar');
         Route::resource('facturas','FacturaController');
 
 
         Route::delete('facturaelemento_delete_modal', 'FacturaelementoController@eliminar')->name('facturaelementos.eliminar');
         Route::put('facturaelemento_edit_modal', 'FacturaelementoController@editar')->name('facturaelementos.editar');
         Route::resource('facturaelementos','FacturaelementoController');
+        
     });
 });
 

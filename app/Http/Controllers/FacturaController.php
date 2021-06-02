@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Factura;
 use App\Models\Cliente;
+use App\Models\Facturaelemento;
 use App\Models\Proveedor;
+use App\Models\Solicitude;
 use App\Models\Tproducto;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Redirect;
 
 class FacturaController extends Controller
 {
@@ -50,6 +54,7 @@ class FacturaController extends Controller
     {
         $factura = Factura::create($request->all());
         $factura->numero = Factura::count();
+        $factura->fecha = now();
         $factura->save();
         return redirect()->route('facturas.edit',$factura)->with('success', 'Factura insertada!!');
     }
@@ -75,6 +80,23 @@ class FacturaController extends Controller
     	return $pdf->setPaper('chart','landscape')->stream('Factura'.$factura->id.'.pdf');
     }
 
+    public function importar(Request $request, Factura $factura)
+    {
+        $solicitude = Solicitude::find($request->solicitud_id);
+        foreach ($solicitude->solicitudproductos as $key => $sproducto) {
+            $facturaitem = New Facturaelemento();
+            $facturaitem->cantidad = $sproducto->cantidad;
+            $facturaitem->precio = $sproducto->tproducto->valorbruto;
+            $facturaitem->um = "U";
+            $facturaitem->descripcion = $sproducto->tproducto->descripcion;
+            $facturaitem->tipo = 0;
+            $facturaitem->factura_id = $factura->id;
+            $facturaitem->save();
+        }
+        $url = URL::route('facturas.edit',$factura) . '#cardfacturaelementos';
+        return Redirect::to($url)->with('success','Elementos importados!!!');
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -86,7 +108,8 @@ class FacturaController extends Controller
         $title = "Facturas";
         if ($factura->estado == 0) {
             $tproductos = Tproducto::all();
-            return view('facturas.edit',compact('title','factura','tproductos'));
+            $solicitudes = Solicitude::where('solicitudes.estado','=',3)->get();
+            return view('facturas.edit',compact('title','factura','tproductos','solicitudes'));
         }else {
             return redirect()->route('facturas.index')->with('error','La factura no se puede modificar, no está en proceso');
         }

@@ -8,6 +8,8 @@ use App\Models\Ordentrabajo;
 use App\Models\Otsolicitude;
 use App\Models\Solicitude;
 use App\Models\Solicitudproducto;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Redirect;
 
 use Illuminate\Http\Request;
 
@@ -57,7 +59,9 @@ class SolicitudproductoController extends Controller
         $ofertaproducto = Ofertaproducto::where('ofertaproductos.oferta_id',$oferta->id)->where('ofertaproductos.tproducto_id',$solicitudproducto->tproducto_id)->first();
         $ofertaproducto->cantidad = $ofertaproducto->cantidad -  $solicitudproducto->cantidad;
         $ofertaproducto->save();
-        return redirect()->route('solicitudes.edit',$solicitude)->with('success','Elemento insertado');
+        // return redirect()->route('solicitudes.edit',$solicitude)->with('success','Elemento insertado');
+        $url = URL::route('solicitudes.edit',$solicitude) . '#cardProductos';
+        return Redirect::to($url)->with('success','Producto insertado!!!');
     }
 
     /**
@@ -108,7 +112,9 @@ class SolicitudproductoController extends Controller
         $ofertaproducto = Ofertaproducto::where('ofertaproductos.oferta_id',$oferta->id)->where('ofertaproductos.tproducto_id',$solicitudproducto->tproducto_id)->first();
         $ofertaproducto->cantidad = $ofertaproducto->cantidad - $solicitudproducto->cantidad;
         $ofertaproducto->save();
-        return redirect()->route('solicitudes.edit', $solicitude)->with('success','Producto modificado!!!');
+        // return redirect()->route('solicitudes.edit', $solicitude)->with('success','Producto modificado!!!');
+        $url = URL::route('solicitudes.edit',$solicitude) . '#cardProductos';
+        return Redirect::to($url)->with('success','Producto Modificado!!!');
     }
 
     /**
@@ -128,6 +134,8 @@ class SolicitudproductoController extends Controller
         $ofertaproducto->cantidad = $ofertaproducto->cantidad + $solicitudproducto->cantidad;
         $ofertaproducto->save();
         $solicitudproducto->delete();
-        return redirect()->route('solicitudes.edit',$solicitude)->with('success','Elemento eliminado.');
+        // return redirect()->route('solicitudes.edit',$solicitude)->with('success','Elemento eliminado.');
+        $url = URL::route('solicitudes.edit',$solicitude) . '#cardProductos';
+        return Redirect::to($url)->with('success','Producto eliminado!!!');
     }
 }

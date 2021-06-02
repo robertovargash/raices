@@ -7,6 +7,8 @@ use App\Models\Otsolicitude;
 use App\Models\Solicitude;
 use App\Models\Vale;
 use App\Models\Valeitem;
+use Barryvdh\DomPDF\Facade as PDF;
+use App\Models\Proveedor;
 
 use Illuminate\Http\Request;
 
@@ -19,7 +21,7 @@ class OrdentrabajoController extends Controller
      */
     function __construct()
     {
-        $this->middleware('permission:gestion_ot', ['only' => ['index','edit','show','update','cancelar','terminar']]);
+        $this->middleware('permission:gestion_ot', ['only' => ['index','edit','show','update','cancelar','terminar','pdf']]);
     }
     /**
      * Display a listing of the resource.
@@ -156,5 +158,19 @@ class OrdentrabajoController extends Controller
         }else{
             return redirect()->route('ordentrabajos.index')->with('error','La órden no se puede terminar, no está en confirmada. Abra un vale para confirmar.');
         }
+    }
+
+    public function pdf(Ordentrabajo $ot)
+    {
+        //este funciona bien, pero solo en chrome
+        $title = "OT ".$ot->numero;
+        // return view('vales.valepdf',compact('title','vale','mercancias'));
+        $proveedor = Proveedor::first();
+        $otsolicitudes = Otsolicitude::all();
+         $pdf = PDF::setOptions([
+            'logOutputFile' => storage_path('logs/log.htm'),
+            'tempDir' => storage_path('logs/')
+        ])->loadView('ordentrabajos.pdf', compact('title','ot','otsolicitudes','proveedor'));
+    	 return $pdf->setPaper('chart','landscape')->stream('OT'.$ot->numero.'.pdf');
     }
 }

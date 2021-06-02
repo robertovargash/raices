@@ -197,6 +197,10 @@
                   </select>
                 </div>
             </div>
+            <div class="col-12 form-group">
+              <strong>Recibe:</strong>
+              <input type="text" name="recibe" class="form-control" placeholder="Recibe">
+            </div>
             <div class="col-12">
                 <div class="form-group">
                     <strong>Elabora (*):</strong>

@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Cuentasbancariascliente;
-
 use App\Models\Cliente;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Redirect;
 
 class CuentasbancariasclienteController extends Controller
 {
@@ -49,7 +49,10 @@ class CuentasbancariasclienteController extends Controller
         $cuenta = Cuentasbancariascliente::create($request->all());
         $cliente = Cliente::find($cuenta->cliente_id);
 
-        return redirect()->route('clientes.edit',$cliente)->with('success','Cuenta insertada');
+        // return redirect()->route('clientes.edit',$cliente)->with('success','Cuenta insertada');
+
+        $url = URL::route('clientes.edit',$cliente) . '#cardCuentas';
+        return Redirect::to($url)->with('success','Cuenta insertada!!!');
 
     }
 
@@ -92,7 +95,9 @@ class CuentasbancariasclienteController extends Controller
         $cuenta = Cuentasbancariascliente::find($request->id);
         $cuenta->update($request->all());
         $cliente = Cliente::find($cuenta->cliente_id);
-        return redirect()->route('clientes.edit', $cliente)->with('success','Cuenta modificada!!!.');
+        // return redirect()->route('clientes.edit', $cliente)->with('success','Cuenta modificada!!!.');
+        $url = URL::route('clientes.edit',$cliente) . '#cardCuentas';
+        return Redirect::to($url)->with('success','Cuenta modificada!!!');
     }
 
     /**
@@ -108,6 +113,8 @@ class CuentasbancariasclienteController extends Controller
         $cliente = cliente::find($cuenta->cliente_id);
         $cuenta->delete();
 
-        return redirect()->route('clientes.edit', $cliente)->with('success','Cuenta eliminada!!!.');
+        // return redirect()->route('clientes.edit', $cliente)->with('success','Cuenta eliminada!!!.');
+        $url = URL::route('clientes.edit',$cliente) . '#cardCuentas';
+        return Redirect::to($url)->with('success','Cuenta eliminada!!!');
     }
 }

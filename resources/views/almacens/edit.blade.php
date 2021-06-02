@@ -164,7 +164,7 @@
                     <td>
                         <div class="d-inline">
                             <a href="{{ route('recepcions.show',$recepcion) }}" class="btn btn-link text-info">Detalles</a>
-                            <a href="{{ route('recepcions.imprimir',$recepcion) }}" class="btn btn-link text-info ">Imprimir</a>
+                            <a href="{{ route('recepcions.imprimir',$recepcion) }}" class="btn btn-link text-info ">PDF</a>
                             @can('gestion_recepcion')
                                 <a href="{{ route('recepcions.edit',$recepcion) }}" class="btn btn-link text-primary" {{ $recepcion->activo != 0 ? 'hidden' : 'enabled'}}>{{-- <span class="fas fa-pencil-alt"> --}}Editar</a>
                                 <a class="btn btn-link deleteRecepcion text-danger" {{ $recepcion->activo != 0 ? 'hidden' : 'enabled'}} data-recepcion_id="{{$recepcion->id}}">Cancelar</a>
@@ -242,7 +242,7 @@
                     <td>{{ $vale->observaciones }}</td>
                     <td>
                         <a href="{{ route('vales.show',$vale) }}" class="btn btn-link text-info ">Detalles</a>
-                        <a href="{{ route('vales.imprimir',$vale) }}" class="btn btn-link text-info ">Imprimir</a>
+                        <a href="{{ route('vales.imprimir',$vale) }}" class="btn btn-link text-info ">PDF</a>
                         @can('gestion_vale')
                             <a href="{{ route('vales.edit',$vale) }}" class="btn btn-link text-primary " {{ $vale->activo != 0 ? 'hidden' : ''}}>Editar</a>
                             <a class="btn btn-link deleteVale text-danger " {{ $vale->activo != 0 ? 'hidden' : ''}} data-vale_id="{{$vale->id}}">Cancelar</a>

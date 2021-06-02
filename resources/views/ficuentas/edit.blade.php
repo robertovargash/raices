@@ -39,47 +39,43 @@
               </div>
             </div>
             <div class="card-body">
-              <div class="row">
+              <form role="form" id="editData" action="{{ route('ficuentas.update',$ficuenta) }}" method="POST">
+                @csrf
+                @method('PUT')
                 <div class="col-12">
-                  <form role="form" id="editData" action="{{ route('ficuentas.update',$ficuenta) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <div class="col-12">
-                      <div class="form-group">
-                        <strong>Clasificador:</strong>
-                        <select id="clasificador" class="form-control select2bs4" name="clasificadorcuenta_id" style="width: 100%;">
-                            <option value="" selected="selected" hidden="hidden">Selecciona clasificador de cuenta</option>
-                            @foreach ($clasificadores as $clasif)
-                                <option value="{{$clasif->id}}" {{$ficuenta->clasificadorcuenta_id == $clasif->id ? ' selected ' : '' }}>{{$clasif->clasificacion}}</option>
-                            @endforeach
-                        </select>
-                      </div>
-                    </div>
-                    <div class="col-12">
-                      <div class="form-group">
-                          <strong>Cuenta (*):</strong>
-                          <input type="text" name="numero" value="{{ $ficuenta->numero }}" id="idnumero" class="form-control" placeholder="Número">
-                      </div>
-                    </div>
-                    <div class="col-12">
-                      <div class="form-group">
-                          <strong>Descripción (*):</strong>
-                          <textarea class="form-control" style="height:150px" id="iddescripcion" name="descripcion" placeholder="Descripción">{{ $ficuenta->descripcion }}</textarea>
-                      </div>
-                    </div>
-                    <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-primary">Actualizar</button>
-                    </div>
-                  </form>
+                  <div class="form-group">
+                    <strong>Clasificador:</strong>
+                    <select id="clasificador" class="form-control select2bs4" name="clasificadorcuenta_id" style="width: 100%;">
+                        <option value="" selected="selected" hidden="hidden">Selecciona clasificador de cuenta</option>
+                        @foreach ($clasificadores as $clasif)
+                            <option value="{{$clasif->id}}" {{$ficuenta->clasificadorcuenta_id == $clasif->id ? ' selected ' : '' }}>{{$clasif->clasificacion}}</option>
+                        @endforeach
+                    </select>
+                  </div>
                 </div>
-              </div>
+                <div class="col-12">
+                  <div class="form-group">
+                      <strong>Cuenta (*):</strong>
+                      <input type="text" name="numero" value="{{ $ficuenta->numero }}" id="idnumero" class="form-control" placeholder="Número">
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                      <strong>Descripción (*):</strong>
+                      <textarea class="form-control" style="height:150px" id="iddescripcion" name="descripcion" placeholder="Descripción">{{ $ficuenta->descripcion }}</textarea>
+                  </div>
+                </div>
+                <div class="col-12 text-center">
+                    <button type="submit" class="btn btn-success btn-block">Actualizar</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-12">
-          <div class="card card-info">
+          <div class="card card-info" id="cardSubCuentas">
             <div class="card-header">
               <h3 class="card-title">Subcuentas de la cuenta</h3>
               <div class="card-tools">

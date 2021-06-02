@@ -82,7 +82,7 @@
       </div>
       <div class="row">
         <div class="col-12">
-          <div class="card card-info">
+          <div class="card card-info" id="cardCuentas">
             <div class="card-header">
               <h3 class="card-title">Cuentas bancarias del proveedor</h3>
               <div class="card-tools">
@@ -260,7 +260,7 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                        <button type="submit" id="bntInsertar" class="btn btn-success btn-block">Insertar</button>
+                        <button type="submit" id="bntActualizar" class="btn btn-success btn-block">Actualizar</button>
                     </div>
                 </div>
             </form>

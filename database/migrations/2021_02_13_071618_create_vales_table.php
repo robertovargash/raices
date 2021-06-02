@@ -23,7 +23,7 @@ class CreateValesTable extends Migration
             $table->string('p_solicita',250)->default("")->nullable();
             $table->string('p_entrega',250)->default("")->nullable();
             $table->string('p_autoriza',250)->default("")->nullable();
-            $table->timestamp('fecha');
+            $table->date('fecha');
             $table->integer('activo')->default(0);
             $table->integer('tipovale')->default(0);
             $table->unsignedInteger('ordentrabajo_id');

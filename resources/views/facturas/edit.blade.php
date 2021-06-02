@@ -7,7 +7,7 @@
         <div class="col-sm-6">
           <div class="col-lg-12 margin-tb">
             <div class="pull-left">
-              <h2>Datos de la solicitud</h2>
+              <h2>Datos de la Factura</h2>
             </div>
             <div class="pull-right">
                 <a class="btn btn-primary" href="{{ route('facturas.index') }}"> Atrás</a>
@@ -29,54 +29,54 @@
               </div>
             </div>
             <div class="card-body">
-              <div class="row">
+              <form id="formUpdate" action="{{ route('facturas.update',$factura->id) }}" role="form" method="POST">
+                @csrf
+                @method('PUT')
+                <input type="hidden" value="{{ $factura->estado }}" name="estado" class="form-control">
                 <div class="col-12">
-                    <form id="formUpdate" action="{{ route('facturas.update',$factura->id) }}" role="form" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" value="{{ $factura->estado }}" name="estado" class="form-control">
-                        <div class="col-12">
-                          <div class="form-group">
-                              <strong>Cliente: </strong>*
-                              <input type="text" readonly value="{{ $factura->cliente->nombre }}" class="form-control" placeholder="Cliente">
-                          </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <strong>Elaborada:</strong>
-                                <input type="text" readonly value="{{ $factura->elabora }}" name="elabora" class="form-control" placeholder="Elabora">
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <strong>Transportista:</strong>
-                                <input type="text" value="{{ $factura->transporta }}" name="transporta" class="form-control" placeholder="Transportista">
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <strong>CI del transportista:</strong>
-                                <input type="text" value="{{ $factura->tci }}" name="tci" class="form-control" placeholder="CI">
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <strong>Chapa del transportista:</strong>
-                                <input type="text" value="{{ $factura->tchapa }}" name="tchapa" class="form-control" placeholder="Chapa">
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <strong>Descripción:</strong>
-                                <textarea class="form-control" style="height:150px" name="descripcion" placeholder="Descripción">{{ $factura->descripcion }}</textarea>
-                            </div>
-                        </div>
-                        <div class="col-12 text-center">
-                            <button type="submit" class="btn btn-success btn-block">Actualizar</button>
-                        </div>
-                    </form>
+                  <div class="form-group">
+                      <strong>Cliente: </strong>*
+                      <input type="text" readonly value="{{ $factura->cliente->nombre }}" class="form-control" placeholder="Cliente">
+                  </div>
                 </div>
-              </div>
+                <div class="col-12 form-group">
+                    <strong>Recibe: </strong>
+                    <input type="text" value="{{ $factura->recibe }}" name="recibe" class="form-control" placeholder="Recibe">
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Elaborado por:</strong>
+                        <input type="text" readonly value="{{ $factura->elabora }}" name="elabora" class="form-control" placeholder="Elabora">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Transportista:</strong>
+                        <input type="text" value="{{ $factura->transporta }}" name="transporta" class="form-control" placeholder="Transportista">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>CI del transportista:</strong>
+                        <input type="text" value="{{ $factura->tci }}" name="tci" class="form-control" placeholder="CI">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Chapa del transportista:</strong>
+                        <input type="text" value="{{ $factura->tchapa }}" name="tchapa" class="form-control" placeholder="Chapa">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Descripción:</strong>
+                        <textarea class="form-control" style="height:150px" name="descripcion" placeholder="Descripción">{{ $factura->descripcion }}</textarea>
+                    </div>
+                </div>
+                <div class="col-12 text-center">
+                    <button type="submit" class="btn btn-success btn-block">Actualizar</button>
+                </div>
+            </form>
             </div>
           </div>
         </div>
@@ -92,10 +92,10 @@
             </div>
             <div class="card-body">
               <div class="pull-left mb-2">
-                <button type="button" class="btn btn-info importarSolicitud">Importar solicitud</button>
-                <button type="button" class="btn btn-info addElemento">Adicionar producto</button>
-                <button type="button" class="btn btn-success addRecargo">Recargo</button>
-                <button type="button" class="btn btn-warning addDescuento">Descuento</button>
+                <button type="button" class="btn m-2 btn-info importarSolicitud" id="cardfacturaelementos">Importar solicitud</button>
+                <button type="button" class="btn m-2 btn-info addElemento">Adicionar producto</button>
+                <button type="button" class="btn m-2 btn-success addRecargo">Adicionar Recargo</button>
+                <button type="button" class="btn m-2 btn-warning addDescuento">Adicionar Descuento</button>
               </div>
               <table id="tablaFacturaElementos" class="table table-bordered table-hover">
                 <thead>
@@ -115,11 +115,16 @@
                         <td>{{ $key + 1 }}</td>
                         <td>{{ $facturaelemento->descripcion }}</td>
                         <td>{{ $facturaelemento->um }}</td>
-                        <td>{{ $facturaelemento->cantidad }}</td>
+                        @if ($facturaelemento->tipo === 0)
+                          <td>{{ $facturaelemento->cantidad }}</td>
+                        @else
+                          <td>-</td>
+                        @endif                        
                         <td>{{ $facturaelemento->precio }}</td>
                         <td>{{ $facturaelemento->precio * $facturaelemento->cantidad}}</td>
                         <td>
-                            @can('gestion_facturas')
+                          @can('gestion_facturas')
+                              @if ($facturaelemento->tipo === 0)
                                 <a class="btn btn-link editFacturaElemento text-primary"
                                 data-id="{{$facturaelemento->id}}"
                                 data-descripcion="{{$facturaelemento->descripcion}}"
@@ -127,22 +132,31 @@
                                 data-cantidad="{{$facturaelemento->cantidad}}"
                                 data-precio="{{$facturaelemento->precio}}">
                                 <b>Editar</b></a>
-                                <a class="btn btn-link deleteFacturaElemento text-danger" data-id="{{$facturaelemento->id}}"><b>Eliminar</b></a>
-                            @endcan
+                              @else
+                                <a class="btn btn-link editFacturaRD text-primary"
+                                data-id="{{$facturaelemento->id}}"
+                                data-descripcion="{{$facturaelemento->descripcion}}"
+                                data-um="{{$facturaelemento->um}}"
+                                data-cantidad="{{$facturaelemento->cantidad}}"
+                                data-precio="{{$facturaelemento->precio}}">
+                                <b>Editar</b></a>
+                              @endif                                  
+                              <a class="btn btn-link deleteFacturaElemento text-danger" data-id="{{$facturaelemento->id}}"><b>Eliminar</b></a>
+                          @endcan                            
                         </td>
                   </tr>
                   @endforeach
                 </tbody>
                 <tfoot>
-                  <tr>
-                        <th>#</th>
-                        <th>Descripción</th>
-                        <th>UM</th>
-                        <th>Cantidad</th>
-                        <th>Precio</th>
-                        <th>Importe</th>
-                        <th></th>
-                  </tr>
+                    <tr>
+                          <th>#</th>
+                          <th>Descripción</th>
+                          <th>UM</th>
+                          <th>Cantidad</th>
+                          <th>Precio</th>
+                          <th>Importe</th>
+                          <th></th>
+                    </tr>
                 </tfoot>
             </table>
             </div>
@@ -289,6 +303,88 @@
     <!-- /.modal-dialog -->
 </div>
 
+<div class="modal fade" id="modalAddDescuento">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Descuento</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <form id="addFacturaDescuento" action="{{ route('facturaelementos.store') }}" method="POST">
+              @csrf
+               <div class="row">
+                  <input type="hidden" name="factura_id" value="{{ $factura->id }}" class="form-control">
+                  <input type="hidden" name="tipo" value="2" class="form-control">
+                  <div class="col-12">
+                      <div class="form-group">
+                          <strong>Motivo del descuento:</strong>*
+                          <input type="text" name="descripcion" id="r_descripcion" class="form-control" placeholder="Descripción">
+                      </div>
+                  </div>
+                  <input type="hidden" name="cantidad" value="1" id="r_cantidad" class="form-control" placeholder="Cantidad">
+
+                  <div class="col-12">
+                    <div class="form-group">
+                        <strong>Importe *:</strong>
+                        <input type="number" name="precio" id="r_precio" class="form-control" placeholder="Precio">
+                    </div>
+                  </div>
+                  <input type="hidden" name="um" value="" id="um" class="form-control" placeholder="UM">
+
+                  <div class="col-12 text-center">
+                      <button type="submit" id="btnDInsert" class="btn btn-success btn-block">Adicionar</button>
+                  </div>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="modalImportarSolicitud">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Seleccione una solicitud a facturar</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="importarSolicitud" action="{{ route('facturas.importar',$factura->id) }}" role="form" method="POST">
+          @csrf
+          @method('PUT')
+           <div class="row">
+            <div class="col-12">
+              <div class="form-group">
+                <strong>Solicitud:</strong>
+                <select id="solicitud" class="form-control select2bs4" name="solicitud_id" style="width: 100%;">
+                    <option value="" selected="selected" disabled hidden="hidden">Selecciona una solicitud a importar</option>
+                    @foreach ($solicitudes as $solicitud)
+                        <option value="{{$solicitud->id}}">{{$solicitud->numero}} {{ $solicitud->cliente}}</option>
+                    @endforeach
+                </select>
+              </div>
+            </div>
+            <div class="col-12 text-center">
+                  <button type="submit" id="btnImportar" class="btn btn-success btn-block">Importar datos</button>
+            </div>
+          </div>
+      </form>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
 <div class="modal fade" id="modalEditproducto">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -342,6 +438,50 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+
+<div class="modal fade" id="modalEditRD">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Editando Recargo-descuento</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <form id="editFacturaElementoRD" action="{{ route('facturaelementos.editar') }}" method="POST">
+              @csrf
+              @method('PUT')
+               <div class="row">
+                  <input type="hidden" name="factura_id" value="{{ $factura->id }}" class="form-control">
+                  <input type="hidden" name="id" id="editrd_facturaelemento_id">
+                  <div class="col-12">
+                      <div class="form-group">
+                          <strong>Motivo recargo/descuento *:</strong>
+                          <input type="text" name="descripcion" id="editrd_descripcion" class="form-control" placeholder="Descripción">
+                      </div>
+                  </div>
+                  <input type="hidden" name="cantidad" id="editrd_cantidad" class="form-control" placeholder="Cantidad">
+                  <div class="col-12">
+                    <div class="form-group">
+                        <strong>Importe *:</strong>
+                        <input type="number" name="precio" id="editrd_precio" class="form-control" placeholder="Precio">
+                    </div>
+                  </div>
+                  <input type="hidden" name="um" id="editrd_um" class="form-control" placeholder="UM">
+                  <div class="col-12 text-center">
+                      <button type="submit" id="btnRDEdit" class="btn btn-success btn-block">Editar</button>
+                  </div>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
 @endsection
 @section('scripts')
 <script type="text/javascript">
@@ -363,10 +503,22 @@ $(document).on('click','.addElemento',function(){
     $('#modaladdElemento').modal('show');
 });
 
+$(document).on('click','.importarSolicitud',function(){
+    $('#btnImportar').attr('disabled', false);
+    $('#btnImportar').html('Importar');
+    $('#modalImportarSolicitud').modal('show');
+});
+
 $(document).on('click','.addRecargo',function(){
     $('#btnRInsert').attr('disabled', false);
     $('#btnRInsert').html('Insertar');
     $('#modalAddRecargo').modal('show');
+});
+
+$(document).on('click','.addDescuento',function(){
+    $('#btnDInsert').attr('disabled', false);
+    $('#btnDInsert').html('Insertar');
+    $('#modalAddDescuento').modal('show');
 });
 
 $(document).on('click','.editFacturaElemento',function(){
@@ -380,7 +532,25 @@ $(document).on('click','.editFacturaElemento',function(){
     $('#edit_um').val(um);
     $('#edit_cantidad').val(cantidad);
     $('#edit_precio').val(precio);
+    $('#btnEdit').attr('disabled', false);
+    $('#btnEdit').html('Actualizar');
     $('#modalEditproducto').modal('show');
+});
+
+$(document).on('click','.editFacturaRD',function(){
+    var analisisID = $(this).attr('data-id');
+    var decripcion = $(this).attr('data-descripcion');
+    var um = $(this).attr('data-um');
+    var cantidad = $(this).attr('data-cantidad');
+    var precio=$(this).attr('data-precio');
+    $('#editrd_facturaelemento_id').val(analisisID);
+    $('#editrd_descripcion').val(decripcion);
+    $('#editrd_um').val(um);
+    $('#editrd_cantidad').val(cantidad);
+    $('#editrd_precio').val(precio);
+    $('#btnRDEdit').attr('disabled', false);
+    $('#btnRDEdit').html('Actualizar');
+    $('#modalEditRD').modal('show');
 });
   $(document).ready(function () {
     $('#btnInsert').click(function () {
@@ -395,10 +565,22 @@ $(document).on('click','.editFacturaElemento',function(){
             $('#addFacturaRecargo').submit();
             return true;
     });
+    $('#btnDInsert').click(function () {
+            $('#btnDInsert').attr('disabled', true);
+            $('#btnDInsert').html('Insertando...');
+            $('#addFacturaDescuento').submit();
+            return true;
+    });
     $('#btnEdit').click(function () {
             $('#btnEdit').attr('disabled', true);
             $('#btnEdit').html('Actualizando...');
             $('#editFacturaElemento').submit();
+            return true;
+    });
+    $('#btnRDEdit').click(function () {
+            $('#btnRDEdit').attr('disabled', true);
+            $('#btnRDEdit').html('Actualizando...');
+            $('#editFacturaElementoRD').submit();
             return true;
     });
     $('#addFacturaElemento').validate({
@@ -483,6 +665,35 @@ $(document).on('click','.editFacturaElemento',function(){
         $(element).removeClass('is-invalid');
       }
     });
+    $('#editFacturaElementoRD').validate({
+        rules: {
+        descripcion: {
+          required : true,
+        },
+        precio: {
+          required: true,
+        },
+      },
+      messages: {
+        descripcion: {
+          required : "Inserte el motivo del recargo o escuento",
+        },
+        precio: {
+          required: "Inserte el Importe",
+        },
+      },
+      errorElement: 'span',
+      errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+      },
+      highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+      },
+      unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+      }
+    });
     $('#addFacturaRecargo').validate({
         rules: {
         descripcion: {
@@ -495,6 +706,35 @@ $(document).on('click','.editFacturaElemento',function(){
       messages: {
         descripcion: {
           required : "Inserte el motivo del recargo",
+        },
+        precio: {
+          required: "Inserte el importe",
+        },
+      },
+      errorElement: 'span',
+      errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+      },
+      highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+      },
+      unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+      }
+    });
+    $('#addFacturaDescuento').validate({
+        rules: {
+        descripcion: {
+          required : true,
+        },
+        precio: {
+          required: true,
+        },
+      },
+      messages: {
+        descripcion: {
+          required : "Inserte el motivo del descuento",
         },
         precio: {
           required: "Inserte el importe",

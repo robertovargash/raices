@@ -14,6 +14,8 @@ use App\Models\Oferta;
 use App\Models\Ofertaproducto;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade as PDF;
+use App\Models\Proveedor;
 
 class SolicitudeController extends Controller
 {
@@ -60,6 +62,7 @@ class SolicitudeController extends Controller
     {
         $solicitude = Solicitude::create($request->all());
         $solicitude->numero = Solicitude::count();
+        $solicitude->fechasolicitud = now();
         $solicitude->save();
         return redirect()->route('solicitudes.edit',$solicitude)->with('success', 'Solicitud insertada!!');
     }
@@ -237,5 +240,33 @@ class SolicitudeController extends Controller
         }else{
             return redirect()->route('solicitudes.index')->with('success','No se puede entregar, no esta terminada');
         }
+    }
+
+    public function pdf(Solicitude $solicitude)
+    {
+        //este funciona bien, pero solo en chrome
+        $title = "Solicitud ".$solicitude->numero;
+        // return view('vales.valepdf',compact('title','vale','mercancias'));
+        $proveedor = Proveedor::first();
+
+        $qr = "No. Solicitud : ".$solicitude->id."\nCliente: ".$solicitude->cliente."\nTelefono: ".$solicitude->telefono.
+        "\nA entregar: ".date('d/m/Y', strtotime($solicitude->fechasolicitud))."\nDescripcion: ".$solicitude->descripcion;
+        $productos = " \nProductos: ";
+        // dd($solicitude->solicitudproductos);
+        $acobrar = 0;
+        foreach ($solicitude->solicitudproductos as $key => $producto) {
+            $acobrar += $producto->tproducto->valorbruto * $producto->cantidad;
+            $productos .= "\n".$producto->tproducto->nombre. " Cantidad: ". $producto->cantidad;
+        }
+        $qr .= "\nCosto: $".$acobrar;
+        // $qrcobro = "{\"id_transaccion\":9204129971832722, \"importe\":0.01,\"moneda\":\"CUP\"}";
+        $qrcobro = "TRANSFERMOVIL_ETECSA,TRANSFERENCIA,9204129971832722,59012830,";
+        $qr .= $productos;
+       
+         $pdf = PDF::setOptions([
+            'logOutputFile' => storage_path('logs/log.htm'),
+            'tempDir' => storage_path('logs/')
+        ])->loadView('solicitudes.pdf', compact('title','solicitude','proveedor','qr','qrcobro','acobrar'));
+    	 return $pdf->setPaper('chart','landscape')->stream('Solicitud'.$solicitude->numero.'.pdf');
     }
 }

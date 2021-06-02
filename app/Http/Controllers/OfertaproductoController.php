@@ -6,6 +6,8 @@ use App\Models\Ofertaproducto;
 use App\Models\Oferta;
 use App\Models\Ofertamercancia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Redirect;
 
 class OfertaproductoController extends Controller
 {
@@ -53,7 +55,9 @@ class OfertaproductoController extends Controller
             $ofertamercancia->cantidad =  $ofertamercancia->cantidad - ($materiaprima->cantidadnecesaria * $ofertaproducto->cantidad);
             $ofertamercancia->save();
         }
-        return redirect()->route('ofertas.edit',$oferta)->with('success','Producto insertado');
+        // return redirect()->route('ofertas.edit',$oferta)->with('success','Producto insertado');
+        $url = URL::route('ofertas.edit',$oferta) . '#cardProductos';
+        return Redirect::to($url)->with('success','Producto insertado!!!');
     }
 
     /**
@@ -95,8 +99,9 @@ class OfertaproductoController extends Controller
             $ofertamercancia->cantidad =  $ofertamercancia->cantidad - ($materiaprima->cantidadnecesaria * $ofertaproducto->cantidad);
             $ofertamercancia->save();
         }
-        return redirect()->route('ofertas.edit', $oferta)->with('success','Producto modificado!!!.');
-
+        // return redirect()->route('ofertas.edit', $oferta)->with('success','Producto modificado!!!.');
+        $url = URL::route('ofertas.edit',$oferta) . '#cardProductos';
+        return Redirect::to($url)->with('success','Producto modificado!!!');
 
     }
 
@@ -131,6 +136,8 @@ class OfertaproductoController extends Controller
             $ofertamercancia->save();
         }
         $ofertaproducto->delete();
-        return redirect()->route('ofertas.edit',$oferta)->with('success','Producto eliminado');
+        // return redirect()->route('ofertas.edit',$oferta)->with('success','Producto eliminado');
+        $url = URL::route('ofertas.edit',$oferta) . '#cardProductos';
+        return Redirect::to($url)->with('success','Producto eliminado!!!');
     }
 }

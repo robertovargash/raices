@@ -7,6 +7,8 @@ use App\Models\Fisubcuenta;
 use App\Models\Ficuenta;
 use Facade\FlareClient\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Redirect;
 
 class FisubcuentaController extends Controller
 {
@@ -49,7 +51,10 @@ class FisubcuentaController extends Controller
     {
         $subcuenta = Fisubcuenta::create($request->all());
 
-        return redirect()->route('ficuentas.edit',$subcuenta->ficuenta)->with('success','Subcuenta insertada.');
+        // return redirect()->route('ficuentas.edit',$subcuenta->ficuenta)->with('success','Subcuenta insertada.');
+
+        $url = URL::route('ficuentas.edit',$subcuenta->ficuenta) . '#cardSubCuentas';
+        return Redirect::to($url)->with('success','Subcuenta insertada!!!');
     }
 
     /**
@@ -103,8 +108,10 @@ class FisubcuentaController extends Controller
         $ficuenta = Ficuenta::find($fisubcuenta->ficuenta_id);
         $fisubcuenta->delete();
 
-        return redirect()->route('ficuentas.edit',$ficuenta)
-                        ->with('success','Subcuenta eliminada');
+        // return redirect()->route('ficuentas.edit',$ficuenta)->with('success','Subcuenta eliminada');
+
+        $url = URL::route('ficuentas.edit',$ficuenta) . '#cardSubCuentas';
+        return Redirect::to($url)->with('success','Subcuenta eliminada!!!');
     }
 
     public function get_by_cuenta(Request $request){

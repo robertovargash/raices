@@ -29,60 +29,56 @@
               </div>
             </div>
             <div class="card-body">
-              <div class="row">
+              <form role="form" id="clienteData" action="{{ route('clientes.update',$cliente->id) }}" method="POST">
+                @csrf
+                @method('PUT')
                 <div class="col-12">
-                  <form role="form" id="clienteData" action="{{ route('clientes.update',$cliente->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <div class="col-12">
-                      <div class="form-group">
-                          <strong>Nombre (*):</strong>
-                          <input type="text" name="nombre" value="{{ $cliente->nombre }}" id="idNombreProveedor" class="form-control" placeholder="Nombre">
-                      </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Siglas:</strong>
-                            <input type="text" value="{{ $cliente->siglas }}" name="siglas" class="form-control" placeholder="Siglas">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>REEUP:</strong>
-                            <input type="text" value="{{ $cliente->reeup }}" name="reeup" class="form-control" placeholder="REEUP">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>NIT *:</strong>
-                            <input type="text" value="{{ $cliente->nit }}" name="nit" class="form-control" placeholder="NIT">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Teléfono:</strong>
-                            <input type="text" value="{{ $cliente->telefono }}" name="telefono" class="form-control" placeholder="Teléfono">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Dirección:</strong>
-                            <textarea class="form-control" style="height:150px" name="direccion" placeholder="Dirección">{{ $cliente->direccion }}</textarea>
-                        </div>
-                    </div>
-                  <div class="col-12 text-center">
-                    <button type="submit" class="btn btn-success btn-block">Actualizar</button>
+                  <div class="form-group">
+                      <strong>Nombre (*):</strong>
+                      <input type="text" name="nombre" value="{{ $cliente->nombre }}" id="idNombreProveedor" class="form-control" placeholder="Nombre">
                   </div>
-                  </form>
                 </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Siglas:</strong>
+                        <input type="text" value="{{ $cliente->siglas }}" name="siglas" class="form-control" placeholder="Siglas">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>REEUP:</strong>
+                        <input type="text" value="{{ $cliente->reeup }}" name="reeup" class="form-control" placeholder="REEUP">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>NIT *:</strong>
+                        <input type="text" value="{{ $cliente->nit }}" name="nit" class="form-control" placeholder="NIT">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Teléfono:</strong>
+                        <input type="text" value="{{ $cliente->telefono }}" name="telefono" class="form-control" placeholder="Teléfono">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Dirección:</strong>
+                        <textarea class="form-control" style="height:150px" name="direccion" placeholder="Dirección">{{ $cliente->direccion }}</textarea>
+                    </div>
+                </div>
+              <div class="col-12 text-center">
+                <button type="submit" class="btn btn-success btn-block">Actualizar</button>
               </div>
+              </form>
             </div>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-12">
-          <div class="card card-info">
+          <div class="card card-info" id="cardCuentas">
             <div class="card-header">
               <h3 class="card-title">Cuentas bancarias del proveedor</h3>
               <div class="card-tools">
@@ -176,41 +172,39 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="row">
-            <form action="{{ route('cuentasbancariasclientes.store') }}" id="addCuentaData" method="POST">
-                @csrf
-                 <div class="row">
-                    <input type="hidden" name="cliente_id" value="{{ $cliente->id }}" class="form-control"/>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Banco*:</strong>
-                            <input type="text" name="banco" id="banco" class="form-control" placeholder="Banco">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Sucursal*:</strong>
-                            <input type="text" id="sucursal" name="sucursal" class="form-control" placeholder="Sucursal">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Cuenta*:</strong>
-                            <input type="text" id="cuenta" name="cuenta" class="form-control" placeholder="Cuenta">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Moneda*:</strong>
-                            <input type="text" id="moneda" name="moneda" class="form-control" placeholder="Moneda">
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                        <button type="submit" id="bntInsertar" class="btn btn-success btn-block">Insertar</button>
+          <form action="{{ route('cuentasbancariasclientes.store') }}" id="addCuentaData" method="POST">
+            @csrf
+             <div class="row">
+                <input type="hidden" name="cliente_id" value="{{ $cliente->id }}" class="form-control"/>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Banco*:</strong>
+                        <input type="text" name="banco" id="banco" class="form-control" placeholder="Banco">
                     </div>
                 </div>
-            </form>
-          </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Sucursal*:</strong>
+                        <input type="text" id="sucursal" name="sucursal" class="form-control" placeholder="Sucursal">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Cuenta*:</strong>
+                        <input type="text" id="cuenta" name="cuenta" class="form-control" placeholder="Cuenta">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Moneda*:</strong>
+                        <input type="text" id="moneda" name="moneda" class="form-control" placeholder="Moneda">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+                    <button type="submit" id="bntInsertar" class="btn btn-success btn-block">Insertar</button>
+                </div>
+            </div>
+        </form>
         </div>
       </div>
       <!-- /.modal-content -->
@@ -228,43 +222,41 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="row">
-            <form action="{{ route('cuentasbancariasclientes.editar') }}" id="editCuentaDataForm" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="row">
-                    <input type="hidden" name="id" id="edit_id" class="form-control"/>
-                    <input type="hidden" name="cliente_id" value="{{ $cliente->id }}" class="form-control"/>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Banco *:</strong>
-                            <input type="text" name="banco" id="edit_banco" class="form-control" placeholder="Banco">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Sucursal*:</strong>
-                            <input type="text" id="edit_sucursal" name="sucursal" class="form-control" placeholder="Sucursal">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Cuenta*:</strong>
-                            <input type="text" id="edit_cuenta" name="cuenta" class="form-control" placeholder="Cuenta">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Moneda*:</strong>
-                            <input type="text" id="edit_moneda" name="moneda" class="form-control" placeholder="Moneda">
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                        <button type="submit" id="bntInsertar" class="btn btn-success btn-block">Insertar</button>
+          <form action="{{ route('cuentasbancariasclientes.editar') }}" id="editCuentaDataForm" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="row">
+                <input type="hidden" name="id" id="edit_id" class="form-control"/>
+                <input type="hidden" name="cliente_id" value="{{ $cliente->id }}" class="form-control"/>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Banco *:</strong>
+                        <input type="text" name="banco" id="edit_banco" class="form-control" placeholder="Banco">
                     </div>
                 </div>
-            </form>
-          </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Sucursal*:</strong>
+                        <input type="text" id="edit_sucursal" name="sucursal" class="form-control" placeholder="Sucursal">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Cuenta*:</strong>
+                        <input type="text" id="edit_cuenta" name="cuenta" class="form-control" placeholder="Cuenta">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Moneda*:</strong>
+                        <input type="text" id="edit_moneda" name="moneda" class="form-control" placeholder="Moneda">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+                    <button type="submit" id="btnModificar" class="btn btn-success btn-block">Actualizar</button>
+                </div>
+            </div>
+        </form>
         </div>
       </div>
       <!-- /.modal-content -->

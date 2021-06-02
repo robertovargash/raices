@@ -65,7 +65,7 @@
       </div>
       <div class="row">
         <div class="col-12">
-            <div class="card card-primary">
+            <div class="card card-primary" id="cardProductos">
                 <div class="card-header">
                 <h3 class="card-title">Productos en oferta</h3>
                 </div>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Proveedor;
 use App\Models\Proveedorcuenta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Redirect;
 
 class ProveedorcuentaController extends Controller
 {
@@ -48,7 +50,10 @@ class ProveedorcuentaController extends Controller
         $cuenta = Proveedorcuenta::create($request->all());
         $proveedor = Proveedor::find($cuenta->proveedor_id);
 
-        return redirect()->route('proveedors.edit',$proveedor)->with('success','Cuenta insertada');
+        // return redirect()->route('proveedors.edit',$proveedor)->with('success','Cuenta insertada');
+
+        $url = URL::route('proveedors.edit',$proveedor) . '#cardCuentas';
+        return Redirect::to($url)->with('success','Cuenta insertada!!!');
     }
 
     /**
@@ -90,7 +95,10 @@ class ProveedorcuentaController extends Controller
         $cuenta = Proveedorcuenta::find($request->id);
         $cuenta->update($request->all());
         $proveedor = Proveedor::find($cuenta->proveedor_id);
-        return redirect()->route('proveedors.edit', $proveedor)->with('success','Cuenta modificada!!!.');
+        // return redirect()->route('proveedors.edit', $proveedor)->with('success','Cuenta modificada!!!.');
+
+        $url = URL::route('proveedors.edit',$proveedor) . '#cardCuentas';
+        return Redirect::to($url)->with('success','Cuenta modificada!!!');
     }
 
     /**
@@ -106,6 +114,8 @@ class ProveedorcuentaController extends Controller
         $proveedor = Proveedor::find($cuenta->proveedor_id);
         $cuenta->delete();
 
-        return redirect()->route('proveedors.edit', $proveedor)->with('success','Cuenta eliminada!!!.');
+        // return redirect()->route('proveedors.edit', $proveedor)->with('success','Cuenta eliminada!!!.');
+        $url = URL::route('proveedors.edit',$proveedor) . '#cardCuentas';
+        return Redirect::to($url)->with('success','Cuenta eliminada!!!');
     }
 }

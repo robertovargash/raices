@@ -20,7 +20,7 @@ class CreateOrdentrabajosTable extends Migration
             $table->unsignedInteger('numero')->default(0);
             $table->integer('estado')->default(0);
             $table->text('observaciones')->nullable();
-            $table->timestamp('fecha');
+            $table->date('fecha');
             $table->unsignedInteger('cantidad')->default(0);
             $table->string('tecnico',250)->default("");
             $table->string('operario',250)->default("");

@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Redirect;
 use App\Models\Facturaelemento;
 use App\Models\Factura;
 use Illuminate\Http\Request;
@@ -47,8 +48,10 @@ class FacturaelementoController extends Controller
     {
         $elemento = Facturaelemento::create($request->all());
         $factura = Factura::find($elemento->factura_id);
-
-        return redirect()->route('facturas.edit',$factura)->with('success','Elemento insertado!!!');
+        // return redirect()->route('facturas.edit',$factura)->with('success','Elemento insertado!!!');
+        $url = URL::route('facturas.edit',$factura) . '#cardfacturaelementos';
+        return Redirect::to($url)->with('success','Elemento insertado!!!');
+        
     }
 
     /**
@@ -90,7 +93,9 @@ class FacturaelementoController extends Controller
         $elemento = Facturaelemento::find($request->id);
         $elemento->update($request->all());
         $factura = Factura::find($elemento->factura_id);
-        return redirect()->route('facturas.edit', $factura)->with('success','elemento modificado!!!.');
+        // return redirect()->route('facturas.edit', $factura)->with('success','elemento modificado!!!.');
+        $url = URL::route('facturas.edit',$factura) . '#cardfacturaelementos';
+        return Redirect::to($url)->with('success','Elemento modificado!!!');
     }
 
     /**
@@ -105,6 +110,9 @@ class FacturaelementoController extends Controller
         $factura = Factura::find($elemento->factura_id);
         $elemento->delete();
 
-        return redirect()->route('facturas.edit', $factura)->with('success','Elemento eliminado!!!.');
+        // return redirect()->route('facturas.edit', $factura)->with('success','Elemento eliminado!!!.');
+
+        $url = URL::route('facturas.edit',$factura) . '#cardfacturaelementos';
+        return Redirect::to($url)->with('success','Elemento eliminado!!!');
     }
 }

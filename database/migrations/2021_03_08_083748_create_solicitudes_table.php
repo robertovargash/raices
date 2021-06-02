@@ -19,7 +19,7 @@ class CreateSolicitudesTable extends Migration
             $table->string('cliente',250)->nullable();
             $table->string('telefono',250)->nullable();
             $table->integer('pagada')->default(0)->nullable();
-            $table->timestamp('fechasolicitud');
+            $table->date('fechasolicitud');
             $table->date('fechaentrega')->nullable();
             $table->text('descripcion')->nullable();
             $table->integer('estado')->default(0);

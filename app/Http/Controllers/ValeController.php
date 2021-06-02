@@ -63,6 +63,7 @@ class ValeController extends Controller
     {
         $valeNuevo = Vale::create($request->all());
         $valeNuevo->numero = Vale::count();
+        $valeNuevo->fecha = now();
         $valeNuevo->save();
         if ($valeNuevo->tipovale == 1) {
            foreach ($valeNuevo->ordentrabajo->tproducto->materiaprimas as $key => $materiaprima) {

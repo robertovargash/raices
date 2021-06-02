@@ -51,6 +51,7 @@ class RecepcionController extends Controller
     {
         $recepcionNueva = Recepcion::create($request->all());
         $recepcionNueva->numero = Recepcion::count();
+        $recepcionNueva->fecha = now();
         $recepcionNueva->save();
         return redirect()->route('recepcions.edit',$recepcionNueva)->with('success','Recepción insertada.');
     }

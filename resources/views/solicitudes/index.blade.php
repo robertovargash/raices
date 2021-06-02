@@ -63,6 +63,7 @@
                              <td>
                                <div>
                                     <a href="{{ route('solicitudes.show',$solicitude) }}" class="btn btn-link text-info">Detalles</a>
+                                    <a href="{{ route('solicitudes.pdf',$solicitude) }}" class="btn btn-link text-info">PDF</a>
                                    @can('gestion_solicitud')
                                     <a href="{{ route('solicitudes.edit',$solicitude) }}" {{ $solicitude->estado == 0 ? '' : 'hidden' }} class="btn btn-link text-primary">Editar</a>
                                     <a class="btn btn-link text-success confirmarSolicitudes" {{ $solicitude->estado == 0 ? '' : 'hidden' }}  data-id="{{$solicitude->id}}"><b>Confirmar</b></a>

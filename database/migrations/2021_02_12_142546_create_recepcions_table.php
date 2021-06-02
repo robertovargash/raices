@@ -39,7 +39,7 @@ class CreateRecepcionsTable extends Migration
             $table->string('tchapa',50)->default("")->nullable();
 
             $table->string('proveedor',250)->default("");
-            $table->timestamp('fecha');
+            $table->date('fecha');
             $table->integer('activo')->default(0);
             $table->timestamps();
         });

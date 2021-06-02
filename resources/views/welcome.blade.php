@@ -29,7 +29,7 @@
                 <div class="icon">
                   <i class="fas fa fa-boxes"></i>
                 </div>
-                <a href="{{ route('tproductos.index')}}" class="small-box-footer">Ver <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ route('ofertas.index')}}" class="small-box-footer">Ver <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
         </div>
@@ -81,9 +81,95 @@
               </div>
             </div>
         </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                  <h3 class="card-title">Ventas</h3>
+                  <a href="javascript:void(0);">Ver reporte</a>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="d-flex">
+                  <p class="d-flex flex-column">
+                    <span class="text-bold text-lg">$18,230.00</span>
+                    <span>Ventas en la semana</span>
+                  </p>
+                  <p class="ml-auto d-flex flex-column text-right">
+                    <span class="text-success">
+                      <i class="fas fa-arrow-up"></i> 33.1%
+                    </span>
+                    <span class="text-muted">Ventas en el mes</span>
+                  </p>
+                </div>
+                <!-- /.d-flex -->
+
+                <div class="position-relative mb-4">
+                  <canvas id="sales-chart" height="200"></canvas>
+                </div>
+              </div>
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
+@endsection
+@section('scripts')
+@section('scripts')
+<script type="text/javascript">
+var ctx = document.getElementById('sales-chart').getContext('2d');
+    var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'bar',
+// The data for our dataset
+        data: {
+            labels:  {!!json_encode($chart->labels)!!} ,
+            datasets: [
+                {
+                    label: 'Ingresos $',
+                    backgroundColor: {!! json_encode($chart->colours)!!} ,
+                    data:  {!! json_encode($chart->dataset)!!} ,
+                },
+            ]
+        },
+// Configuration options go here
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function(value) {if (value % 1 === 0) {return value;}}
+                    },
+                    scaleLabel: {
+                        display: false
+                    }
+                }]
+            },
+            legend: {
+                labels: {
+                    // This more specific font property overrides the global property
+                    fontColor: '#122C4B',
+                    fontFamily: "'Muli', sans-serif",
+                    padding: 25,
+                    boxWidth: 25,
+                    fontSize: 14,
+                }
+            },
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 10,
+                    top: 0,
+                    bottom: 10
+                }
+            }
+        }
+    });
+</script>
+@endsection
 @endsection

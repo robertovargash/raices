@@ -39,61 +39,57 @@
               </div>
             </div>
             <div class="card-body">
-              <div class="row">
+              <form role="form" id="otData" action="{{ route('ordentrabajos.update',$ordentrabajo->id) }}" method="POST">
+                @csrf
+                @method('PUT')
                 <div class="col-12">
-                  <form role="form" id="otData" action="{{ route('ordentrabajos.update',$ordentrabajo->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Producto:</strong> {{ $ordentrabajo->tproducto->nombre }}
-                            <input type="hidden" name="tproducto_id" readonly value="{{ $ordentrabajo->tproducto->id }}" class="form-control">
-                        </div>
+                    <div class="form-group">
+                        <strong>Producto:</strong> {{ $ordentrabajo->tproducto->nombre }}
+                        <input type="hidden" name="tproducto_id" readonly value="{{ $ordentrabajo->tproducto->id }}" class="form-control">
                     </div>
-                    <input type="hidden" name="estado"  value="{{ $ordentrabajo->estado }}" class="form-control">
-                    <div class="col-12">
-                      <div class="form-group">
-                          <strong>Fecha:</strong>
-                          <input type="date" readonly name="fecha" value="{{ $ordentrabajo->fecha }}" id="idfecha" class="form-control" placeholder="Fecha">
-                      </div>
-                    </div>
-                    <div class="col-12">
-                      <div class="form-group">
-                          <strong>Cantidad:</strong>
-                          <input readonly type="number" value="{{ $ordentrabajo->cantidad }}" name="cantidad" class="form-control" placeholder="Cantidad">
-                      </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Técnico:</strong>
-                            <input type="text" value="{{ $ordentrabajo->tecnico }}" name="tecnico" class="form-control" placeholder="Técnico">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Operario:</strong>
-                            <input type="text" value="{{ $ordentrabajo->operario }}" name="operario" class="form-control" placeholder="Operario">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Observaciones:</strong>
-                            <textarea class="form-control" style="height:150px" name="observaciones" placeholder="Observaciones">{{ $ordentrabajo->observaciones }}</textarea>
-                        </div>
-                    </div>
-                    <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-success btn-block">Actualizar</button>
-                    </div>
-                  </form>
                 </div>
-              </div>
+                <input type="hidden" name="estado"  value="{{ $ordentrabajo->estado }}" class="form-control">
+                <div class="col-12">
+                  <div class="form-group">
+                      <strong>Fecha:</strong>
+                      <input type="date" readonly name="fecha" value="{{ $ordentrabajo->fecha }}" id="idfecha" class="form-control" placeholder="Fecha">
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                      <strong>Cantidad:</strong>
+                      <input readonly type="number" value="{{ $ordentrabajo->cantidad }}" name="cantidad" class="form-control" placeholder="Cantidad">
+                  </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Técnico:</strong>
+                        <input type="text" value="{{ $ordentrabajo->tecnico }}" name="tecnico" class="form-control" placeholder="Técnico">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Operario:</strong>
+                        <input type="text" value="{{ $ordentrabajo->operario }}" name="operario" class="form-control" placeholder="Operario">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Observaciones:</strong>
+                        <textarea class="form-control" style="height:150px" name="observaciones" placeholder="Observaciones">{{ $ordentrabajo->observaciones }}</textarea>
+                    </div>
+                </div>
+                <div class="col-12 text-center">
+                    <button type="submit" class="btn btn-success btn-block">Actualizar</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-12">
-          <div class="card card-info">
+          <div class="card card-info" id="cardProductos">
             <div class="card-header">
               <h3 class="card-title">Productos por solicitudes de esta OT</h3>
               <div class="card-tools">

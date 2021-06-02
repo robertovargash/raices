@@ -59,8 +59,9 @@
                             <td>{{ $ot->observaciones }}</td>
                              <td>
                                 <div>
-                                    @can('gestion_ot')
-                                    <a href="{{ route('ordentrabajos.show',$ot) }}" class="btn btn-link text-info">Detalles</a>
+                                  <a href="{{ route('ordentrabajos.show',$ot) }}" class="btn btn-link text-info">Detalles</a>
+                                  <a href="{{ route('ordentrabajos.pdf',$ot) }}" class="btn btn-link text-info">PDF</a>
+                                    @can('gestion_ot')                                    
                                     <a href="{{ route('ordentrabajos.edit',$ot) }}" class="btn btn-link text-primary" {{ $ot->estado == 0 || $ot->estado == 1 ? '' : 'hidden'}}>Editar</a>
                                     <a class="btn btn-link text-danger disabled cancelarOT" {{ $ot->estado == 0 ? '' : 'hidden'}} data-id="{{$ot->id}}"><s>Cancelar</s></a>
                                     <a class="btn btn-link text-success terminarOT" {{ $ot->estado == 1 ? '' : 'hidden'}} data-id="{{$ot->id}}">Terminar</a>

@@ -102,7 +102,7 @@
       </div>
       <div class="row">
         <div class="col-12">
-          <div class="card card-info">
+          <div class="card card-info" id="cardProductos">
             <div class="card-header">
               <h3 class="card-title">Productos de la solicitud</h3>
               <div class="card-tools">
@@ -203,58 +203,56 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="row">
-            <form id="addSolicitudProducto" action="{{ route('solicitudproductos.store') }}" method="POST">
-                @csrf
-                 <div class="row">
-                    <div class="col-12">
-                        <div class="form-group">
-                            <input type="hidden" name="solicitude_id" value="{{ $solicitude->id }}" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                        <strong for="selectProductos">Producto:</strong>
-                        <select id="selectProductos" class="form-control select2bs4" name="tproducto_id" onchange="refrescar_precio_cantidad()" style="width: 100%;">
-                            <option value="" selected="selected" hidden="hidden">Selecciona producto</option>
-                            @foreach ($tproductos as $tproducto)
-                                @if ($tproducto->existe == 0)
-                                    <option valor="{{ $tproducto->valorbruto }}" cantidadd="{{ $tproducto->cantidadd }}" value="{{$tproducto->id}}">{{$tproducto->nombre}} | {{$tproducto->tipotproducto->tipo}}</option>
-                                @endif
-                            @endforeach
-                        </select>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Cantidad *:</strong>
-                            <input type="number" name="cantidad" id="cantidad" class="form-control" placeholder="Cantidad">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Cantidad máxima:</strong>
-                            <input type="number" readonly id="cantidadmax" class="form-control" placeholder="Cantidad">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                      <div class="form-group">
-                          <strong>Precio *:</strong>
-                          <input readonly type="number" name="precio" id="precio" class="form-control" placeholder="Precio">
-                      </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Observaciones:</strong>
-                            <textarea class="form-control" style="height:150px" name="observaciones" placeholder="Obsrevaciones">Sin detalles</textarea>
-                        </div>
-                    </div>
-                    <div class="col-12 text-center">
-                        <button type="submit" id="btnInsert" class="btn btn-success btn-block">Adicionar</button>
+          <form id="addSolicitudProducto" action="{{ route('solicitudproductos.store') }}" method="POST">
+            @csrf
+             <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <input type="hidden" name="solicitude_id" value="{{ $solicitude->id }}" class="form-control">
                     </div>
                 </div>
-            </form>
-          </div>
+                <div class="col-12">
+                    <div class="form-group">
+                    <strong for="selectProductos">Producto:</strong>
+                    <select id="selectProductos" class="form-control select2bs4" name="tproducto_id" onchange="refrescar_precio_cantidad()" style="width: 100%;">
+                        <option value="" selected="selected" hidden="hidden">Selecciona producto</option>
+                        @foreach ($tproductos as $tproducto)
+                            @if ($tproducto->existe == 0)
+                                <option valor="{{ $tproducto->valorbruto }}" cantidadd="{{ $tproducto->cantidadd }}" value="{{$tproducto->id}}">{{$tproducto->nombre}} | {{$tproducto->tipotproducto->tipo}}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Cantidad *:</strong>
+                        <input type="number" name="cantidad" id="cantidad" class="form-control" placeholder="Cantidad">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Cantidad máxima:</strong>
+                        <input type="number" readonly id="cantidadmax" class="form-control" placeholder="Cantidad">
+                    </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                      <strong>Precio *:</strong>
+                      <input readonly type="number" name="precio" id="precio" class="form-control" placeholder="Precio">
+                  </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Observaciones:</strong>
+                        <textarea class="form-control" style="height:150px" name="observaciones" placeholder="Obsrevaciones">Sin detalles</textarea>
+                    </div>
+                </div>
+                <div class="col-12 text-center">
+                    <button type="submit" id="btnInsert" class="btn btn-success btn-block">Adicionar</button>
+                </div>
+            </div>
+        </form>
         </div>
       </div>
       <!-- /.modal-content -->

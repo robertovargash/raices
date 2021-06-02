@@ -20,7 +20,7 @@ class CreateFacturasTable extends Migration
             $table->foreign('proveedor_id')->references('id')->on('proveedors');
             $table->unsignedInteger('cliente_id');
             $table->foreign('cliente_id')->references('id')->on('clientes');
-            $table->timestamp('fecha');
+            $table->date('fecha');
             $table->integer('estado')->default(0)->nullable();
             $table->string('elabora',250)->nullable()->default("");
             $table->string('entrega',250)->nullable()->default("");

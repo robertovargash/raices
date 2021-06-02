@@ -318,11 +318,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- Summernote -->
 <script src="{{ asset('adminlte/plugins/summernote/summernote-bs4.min.js') }}"></script>
 <!-- ChartJS -->
-{{-- <script src="{{ asset('adminlte/plugins/chart.js/Chart.min.js') }}"></script> --}}
+<script src="{{ asset('adminlte/plugins/chart.js/Chart.min.js') }}"></script>
 <!-- OPTIONAL SCRIPTS -->
-{{-- <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
-<script src="{{ asset('dist/js/demo.js') }}"></script>
-<script src="{{ asset('dist/js/pages/dashboard3.js') }}"></script> --}}
+{{-- <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>--}}
+<script src="{{ asset('adminlte/js/demo.js') }}"></script> 
+{{-- <script src="{{ asset('adminlte/js/pages/dashboard3.js') }}"></script> --}}
 <script>
   $(function () {
     let mensaje ="{{ session('success') }}";
