@@ -11,7 +11,7 @@ class Solicitude extends Model
         'pagada' => 'boolean'
     ];
     protected $fillable = [
-        'numero','cliente','telefono', 'fechasolicitud', 'fechaentrega','descripcion','estado','pagada'
+        'numero','cliente','telefono', 'fechasolicitud', 'fechaentrega','descripcion','estado','pagada','alpedido'
      ];
 
      public function solicitudproductos(){
@@ -21,5 +21,10 @@ class Solicitude extends Model
      public function otsolicitudes()
      {
          return $this->hasMany(Otsolicitude::class);
+     }
+
+     public function solicitudmateriasprimas()
+     {
+         return $this->hasMany(Solicitudmateriasprima::class);
      }
 }

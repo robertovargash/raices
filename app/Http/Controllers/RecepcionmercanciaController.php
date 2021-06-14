@@ -8,6 +8,8 @@ use App\Models\Producto;
 use App\Models\Recepcion;
 use App\Models\Recepcionmercancia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Redirect;
 
 class RecepcionmercanciaController extends Controller
 {
@@ -54,7 +56,10 @@ class RecepcionmercanciaController extends Controller
     {
         $recepmercancia = Recepcionmercancia::create($request->all());
         $recepcion = Recepcion::find($recepmercancia->recepcion_id);
-        return redirect()->route('recepcions.edit',$recepcion)->with('success','Elemento insertado');
+        // return redirect()->route('recepcions.edit',$recepcion)->with('success','Elemento insertado');
+
+        $url = URL::route('recepcions.edit',$recepcion) . '#cardMercancias';
+        return Redirect::to($url)->with('success','Mercancía insertada!!!');
     }
 
     /**
@@ -93,7 +98,10 @@ class RecepcionmercanciaController extends Controller
         $recepcionmercancia->precio = $request->precio;
         $recepcionmercancia->save();
 
-        return redirect()->route('recepcions.edit',$recepcionmercancia->recepcion)->with('success','Elemento modificado.');
+        // return redirect()->route('recepcions.edit',$recepcionmercancia->recepcion)->with('success','Elemento modificado.');
+
+        $url = URL::route('recepcions.edit',$recepcionmercancia->recepcion) . '#cardMercancias';
+        return Redirect::to($url)->with('success','Mercancía modificada!!!');
     }
 
     /**
@@ -109,6 +117,9 @@ class RecepcionmercanciaController extends Controller
         $recepcion = Recepcion::find($recepmercancia->recepcion_id);
         $recepmercancia->delete();
 
-        return redirect()->route('recepcions.edit',$recepcion)->with('success','Elemento eliminado.');
+        // return redirect()->route('recepcions.edit',$recepcion)->with('success','Elemento eliminado.');
+
+        $url = URL::route('recepcions.edit',$recepcion) . '#cardMercancias';
+        return Redirect::to($url)->with('success','Mercancía eliminada!!!');
     }
 }

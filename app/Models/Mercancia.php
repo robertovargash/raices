@@ -60,4 +60,9 @@ class Mercancia extends Model
     public function ofertamercancias(){
         return $this->hasMany(Ofertamercancia::class);
     }
+
+    public function solicitudmateriasprimas()
+     {
+         return $this->hasMany(Solicitudmateriasprima::class);
+     }
 }

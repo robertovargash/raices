@@ -26,7 +26,7 @@ class CreateValesTable extends Migration
             $table->date('fecha');
             $table->integer('activo')->default(0);
             $table->integer('tipovale')->default(0);
-            $table->unsignedInteger('ordentrabajo_id');
+            $table->unsignedInteger('ordentrabajo_id')->nullable();
             $table->foreign('ordentrabajo_id')->references('id')->on('ordentrabajos')->nullable();
             $table->timestamps();
         });

@@ -8,6 +8,8 @@ use App\Models\Vale;
 use App\Models\Almacen;
 use App\Models\Producto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Redirect;
 
 class ValeitemController extends Controller
 {
@@ -59,7 +61,10 @@ class ValeitemController extends Controller
         $almacenmercancia->cantidad = $almacenmercancia->cantidad - $valeitem->cantidad;
         $almacenmercancia->save();
 
-        return redirect()->route('vales.edit',$vale)->with('success','Elemento insertado');
+        // return redirect()->route('vales.edit',$vale)->with('success','Elemento insertado');
+
+        $url = URL::route('vales.edit',$vale) . '#cardMercancias';
+        return Redirect::to($url)->with('success','Mercancía insertada!!!');
     }
 
     /**
@@ -103,7 +108,9 @@ class ValeitemController extends Controller
         $almacenmercancia = Almacenmercancia::where('almacenmercancias.almacen_id','=',$vale->almacen_id)->where('almacenmercancias.mercancia_id','=',$valeitem->mercancia_id)->first();
         $almacenmercancia->cantidad = $almacenmercancia->cantidad - $valeitem->cantidad;
         $almacenmercancia->save();
-        return redirect()->route('vales.edit', $vale)->with('success','Producto modificado!!!.');
+        // return redirect()->route('vales.edit', $vale)->with('success','Producto modificado!!!.');
+        $url = URL::route('vales.edit',$vale) . '#cardMercancias';
+        return Redirect::to($url)->with('success','Mercancía modificada!!!');
     }
 
     /**
@@ -125,6 +132,8 @@ class ValeitemController extends Controller
         $vale = Vale::find($valeitem->vale_id);
         $valeitem->delete();
 
-        return redirect()->route('vales.edit',$vale)->with('success','Elemento eliminado');
+        // return redirect()->route('vales.edit',$vale)->with('success','Elemento eliminado');
+        $url = URL::route('vales.edit',$vale) . '#cardMercancias';
+        return Redirect::to($url)->with('success','Mercancía eliminada!!!');
     }
 }

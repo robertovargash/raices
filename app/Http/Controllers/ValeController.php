@@ -7,6 +7,7 @@ use App\Models\Mercancia;
 use App\Models\Ordentrabajo;
 use App\Models\Otsolicitude;
 use App\Models\Proveedor;
+use App\Models\Solicitudmateriasprima;
 use App\Models\Vale;
 use App\Models\Vale_item;
 use App\Models\Valeitem;
@@ -16,6 +17,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
 use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\DB;
+
 
 class ValeController extends Controller
 {
@@ -66,30 +69,43 @@ class ValeController extends Controller
         $valeNuevo->fecha = now();
         $valeNuevo->save();
         if ($valeNuevo->tipovale == 1) {
-           foreach ($valeNuevo->ordentrabajo->tproducto->materiaprimas as $key => $materiaprima) {
-                $almacenmercancia = Almacenmercancia::where('almacenmercancias.mercancia_id','=',$materiaprima->mercancia_id)
+
+            $otsolicitudegroup = DB::table('solicitudmateriasprimas')->join('mercancias','mercancias.id','solicitudmateriasprimas.mercancia_id')
+            ->join('solicitudes','solicitudes.id','solicitudmateriasprimas.solicitude_id')
+            ->join('solicitudproductos','solicitudproductos.id','solicitudmateriasprimas.solicitudproducto_id')
+            ->join('tproductos','tproductos.id','solicitudproductos.tproducto_id')                           
+            ->join('otsolicitudes','otsolicitudes.solicitude_id','solicitudes.id')
+            ->join('ordentrabajos','ordentrabajos.id','otsolicitudes.ordentrabajo_id')
+            ->where('tproductos.id',$valeNuevo->ordentrabajo->tproducto_id)
+            ->where('ordentrabajos.id',$valeNuevo->ordentrabajo->id)
+            ->groupBy('tproductos.nombre','mercancias.id','mercancias.precio','ordentrabajos.numero')
+            ->select(DB::raw('sum(solicitudmateriasprimas.cantidad) as cantidadnecesaria'),'mercancias.id','mercancias.precio')->get();
+
+
+           foreach ($otsolicitudegroup as $key => $materiaprima) {
+                $almacenmercancia = Almacenmercancia::where('almacenmercancias.mercancia_id','=',$materiaprima->id)
                                                     ->where('almacenmercancias.almacen_id','=',$valeNuevo->almacen_id)->first();
-                if ($almacenmercancia->cantidad <= ($materiaprima->cantidadnecesaria * $valeNuevo->ordentrabajo->cantidad)) {
+                if ($almacenmercancia->cantidad <= $materiaprima->cantidadnecesaria) {
                     Valeitem::create([
                         "vale_id"=>$valeNuevo->id,
-                        "mercancia_id"=>$materiaprima->mercancia_id,
+                        "mercancia_id"=>$materiaprima->id,
                         //si la cantidad q se necesita es mayor a la existente, se pone la existente
                         "cantidad"=>$almacenmercancia->cantidad,
-                        "precio"=>$materiaprima->mercancia->precio
+                        "precio"=>$materiaprima->precio
                     ]);
                     $almacenmercancia->cantidad = 0;
                     $almacenmercancia->save();
                 }else {
                     Valeitem::create([
                         "vale_id"=>$valeNuevo->id,
-                        "mercancia_id"=>$materiaprima->mercancia_id,
+                        "mercancia_id"=>$materiaprima->id,
                         //si no, la cantidad necesaria * la cantidad de productos,
                         //pues una orden trae varios productos
-                        "cantidad"=>$materiaprima->cantidadnecesaria * $valeNuevo->ordentrabajo->cantidad,
-                        "precio"=>$materiaprima->mercancia->precio
+                        "cantidad"=>$materiaprima->cantidadnecesaria,
+                        "precio"=>$materiaprima->precio
                     ]);
                     //descuento la cantidad
-                    $almacenmercancia->cantidad = $almacenmercancia->cantidad - ($materiaprima->cantidadnecesaria * $valeNuevo->ordentrabajo->cantidad);
+                    $almacenmercancia->cantidad = $almacenmercancia->cantidad - $materiaprima->cantidadnecesaria;
                     $almacenmercancia->save();
                 }
                 $ordenTrabajo = Ordentrabajo::find($valeNuevo->ordentrabajo_id);
@@ -222,32 +238,41 @@ class ValeController extends Controller
         if ($vale->activo == 0) {
             $vale->activo = 2;
             foreach ($vale->valeitems as $valeitem){//si cancelo, devuelvo todo
-                $talmacenmercancia = Almacenmercancia::where('almacenmercancias.mercancia_id','=',$valeitem->mercancia_id)->first();
-                $almacenmercancia = Almacenmercancia::find($talmacenmercancia->id);
+                $almacenmercancia = Almacenmercancia::where('almacenmercancias.mercancia_id','=',$valeitem->mercancia_id)->
+                                        where('almacenmercancias.almacen_id','=',$vale->almacen_id)->first();
+                // $almacenmercancia = Almacenmercancia::find($talmacenmercancia->id);
                 $almacenmercancia->cantidad = $almacenmercancia->cantidad + $valeitem->cantidad;
                 $almacenmercancia->save();
             }
             $vale->save();
-            $vale_ordenTrabajo = Ordentrabajo::find($vale->ordentrabajo_id);
-            //Busco una OT de ese producto q este abierta, para mandarle todo para alla
-            $ordenTrabajo = Ordentrabajo::where('ordentrabajos.estado','=',0)->where('ordentrabajos.tproducto_id','=',$vale_ordenTrabajo->tproducto_id)->first();
-            if ($ordenTrabajo) {
-                $ordenTrabajo->cantidad = $ordenTrabajo->cantidad + $vale_ordenTrabajo->cantidad;
-                foreach ($vale_ordenTrabajo->otsolicitudes as $key => $otsolicitud) {
-                    //por cada solicitud que tenia esa OT,
-                    //creo una nueva con la cantidad original, pero ahora son de la OT abierta
-                    Otsolicitude::create([
-                        "ordentrabajo_id"=>$ordenTrabajo->id,
-                        "solicitude_id"=>$otsolicitud->solicitude_id,
-                        "cantidad"=>$otsolicitud->cantidad,
-                        "terminado"=>0
-                    ]);
+            if ($vale->tipovale == 1) {
+                $vale_ordenTrabajo = Ordentrabajo::find($vale->ordentrabajo_id);
+                //aqui primero busco una OT que este abierta del producto, para no tener 2 OT del mismo producto abierta.
+                //y le mando todas las solicitudes para alla
+                $ordenTrabajo = Ordentrabajo::where('ordentrabajos.estado','=',0)
+                                ->where('ordentrabajos.tproducto_id','=',$vale_ordenTrabajo->tproducto_id)
+                                ->where('ordentrabajos.id','!=',$vale_ordenTrabajo->id)
+                                ->first();
+                if ($ordenTrabajo) {
+                    $ordenTrabajo->cantidad = $ordenTrabajo->cantidad + $vale_ordenTrabajo->cantidad;
+                    foreach ($vale_ordenTrabajo->otsolicitudes as $key => $otsolicitud) {
+                        //por cada solicitud que tenia esa OT,
+                        //creo una nueva con la cantidad original, pero ahora son de la OT abierta
+                        Otsolicitude::create([
+                            "ordentrabajo_id"=>$ordenTrabajo->id,
+                            "solicitude_id"=>$otsolicitud->solicitude_id,
+                            "cantidad"=>$otsolicitud->cantidad,
+                            "terminado"=>0
+                        ]);
+                    }
+                    $ordenTrabajo->save();
+                    $vale_ordenTrabajo->estado = 3;//al final la OT actual la cambio a cancelada
+                }else{
+                    $vale_ordenTrabajo->estado = 0;//Cambio el estado de la OT a Proceso
                 }
-                $vale_ordenTrabajo->estado = 3;
-            }else{
-                $vale_ordenTrabajo->estado = 0;//Cambio el estado de la OT a Proceso
+                $vale_ordenTrabajo->save();
             }
-            $vale_ordenTrabajo->save();
+
             $url = URL::route('almacens.edit',$almacen) . '#cardVales';
             return Redirect::to($url)->with('success','Vale cancelado');
         }else{

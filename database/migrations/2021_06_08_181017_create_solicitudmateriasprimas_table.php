@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSolicitudproductosTable extends Migration
+class CreateSolicitudmateriasprimasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,15 @@ class CreateSolicitudproductosTable extends Migration
      */
     public function up()
     {
-        Schema::create('solicitudproductos', function (Blueprint $table) {
+        Schema::create('solicitudmateriasprimas', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('solicitude_id');
             $table->foreign('solicitude_id')->references('id')->on('solicitudes');
-            $table->unsignedInteger('tproducto_id');
-            $table->foreign('tproducto_id')->references('id')->on('tproductos');
-            $table->text('observaciones')->default("");
-            $table->integer('cantidad')->default(0);
-            $table->decimal('precio',18,6)->default(0);
-            $table->integer('terminado')->default(0);
+            $table->unsignedInteger('mercancia_id');
+            $table->foreign('mercancia_id')->references('id')->on('mercancias');
+            $table->unsignedInteger('solicitudproducto_id');
+            $table->foreign('solicitudproducto_id')->references('id')->on('solicitudproductos');
+            $table->decimal('cantidad', 18,2)->nullable()->default(0);
             $table->timestamps();
         });
     }
@@ -34,6 +33,6 @@ class CreateSolicitudproductosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('solicitudproductos');
+        Schema::dropIfExists('solicitudmateriasprimas');
     }
 }

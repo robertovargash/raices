@@ -63,7 +63,7 @@ class SolicitudeController extends Controller
         $solicitude = Solicitude::create($request->all());
         $solicitude->numero = Solicitude::count();
         $solicitude->fechasolicitud = now();
-        $solicitude->save();
+        $solicitude->save();        
         return redirect()->route('solicitudes.edit',$solicitude)->with('success', 'Solicitud insertada!!');
     }
 
@@ -83,15 +83,13 @@ class SolicitudeController extends Controller
         // dd($solicitude->solicitudproductos);
         $acobrar = 0;
         foreach ($solicitude->solicitudproductos as $key => $producto) {
-            $acobrar += $producto->tproducto->valorbruto * $producto->cantidad;
+            $acobrar += $producto->precio * $producto->cantidad;
             $productos .= "\n".$producto->tproducto->nombre. " Cantidad: ". $producto->cantidad;
         }
         $qr .= "\nCosto: $".$acobrar;
         // $qrcobro = "{\"id_transaccion\":9204129971832722, \"importe\":0.01,\"moneda\":\"CUP\"}";
         $qrcobro = "TRANSFERMOVIL_ETECSA,TRANSFERENCIA,9204129971832722,59012830,";
         $qr .= $productos;
-
-
         return view('solicitudes.show',compact('title','solicitude','solicitudproductos','qr','qrcobro','acobrar'));
     }
 
@@ -103,26 +101,41 @@ class SolicitudeController extends Controller
      */
     public function edit(Solicitude $solicitude)
     {
+        $title = "Editando solicitud";
         if ($solicitude->estado == 0) {
-            //se buscan los productos que tenga la recepcion
-            $tproductos = Tproducto::join('ofertaproductos','ofertaproductos.tproducto_id','tproductos.id')
+            if ($solicitude->alpedido == 0) {
+                //se buscan los productos que tenga la oferta
+                $tproductos = Tproducto::join('ofertaproductos','ofertaproductos.tproducto_id','tproductos.id')
                             ->join('ofertas','ofertas.id','ofertaproductos.oferta_id')->where('ofertas.estado',1)->select("tproductos.*","ofertaproductos.cantidad")->get();
-            //Valido llevo para la vista la cantidad ofertada, la vista se encarga de validar que no pasen mas
-            foreach ($tproductos as $tproducto) {
-                if (Solicitudproducto::where('solicitudproductos.solicitude_id','=',$solicitude->id)->where('solicitudproductos.tproducto_id','=',$tproducto->id)->count() > 0) {
-                    $sproduct = Solicitudproducto::where('solicitudproductos.solicitude_id','=',$solicitude->id)->where('solicitudproductos.tproducto_id','=',$tproducto->id)->first();
-                    $tproducto->existe = 1;
-                    $cantidadd = $tproducto->cantidad + $sproduct->cantidad;
-                    $tproducto->cantidadd = bcdiv($cantidadd, '1', 0);
-                }else{
-                    $tproducto->existe = 0;
-                    $cantidadd = $tproducto->cantidad;
-                    $tproducto->cantidadd = bcdiv($cantidadd, '1', 0);
+                foreach ($tproductos as $tproducto) {
+                    if (Solicitudproducto::where('solicitudproductos.solicitude_id','=',$solicitude->id)->where('solicitudproductos.tproducto_id','=',$tproducto->id)->count() > 0) {
+                        $sproduct = Solicitudproducto::where('solicitudproductos.solicitude_id','=',$solicitude->id)->where('solicitudproductos.tproducto_id','=',$tproducto->id)->first();
+                        $tproducto->existe = 1;
+                        $cantidadd = $tproducto->cantidad + $sproduct->cantidad;
+                        $tproducto->cantidadd = bcdiv($cantidadd, '1', 0);
+                    }else{
+                        $tproducto->existe = 0;
+                        $cantidadd = $tproducto->cantidad;
+                        $tproducto->cantidadd = bcdiv($cantidadd, '1', 0);
+                    }
                 }
-
+                return view('solicitudes.edit',compact('title','solicitude','tproductos'));                
+            } else {
+                $tproductos = Tproducto::all();
+                foreach ($tproductos as $tproducto) {
+                    if (Solicitudproducto::where('solicitudproductos.solicitude_id','=',$solicitude->id)->where('solicitudproductos.tproducto_id','=',$tproducto->id)->count() > 0) {
+                        $sproduct = Solicitudproducto::where('solicitudproductos.solicitude_id','=',$solicitude->id)->where('solicitudproductos.tproducto_id','=',$tproducto->id)->first();
+                        $tproducto->existe = 1;
+                        $cantidadd = $tproducto->cantidad + $sproduct->cantidad;
+                        $tproducto->cantidadd = bcdiv($cantidadd, '1', 0);
+                    }else{
+                        $tproducto->existe = 0;
+                        $cantidadd = $tproducto->cantidad;
+                        $tproducto->cantidadd = bcdiv($cantidadd, '1', 0);
+                    }
+                }
+                return view('solicitudes.editpedido',compact('title','solicitude','tproductos'));
             }
-            $title = "Editando solicitud";
-            return view('solicitudes.edit',compact('title','solicitude','tproductos'));
         }else {
             return redirect()->route('solicitudes.index')->with('error','La solicitud no se puede modificar, no está en proceso');
         }
@@ -188,6 +201,7 @@ class SolicitudeController extends Controller
         }
 
     }
+    
     public function confirmar(Request $request)
     {
         $solicitud_id=$request->input('id');
@@ -255,7 +269,7 @@ class SolicitudeController extends Controller
         // dd($solicitude->solicitudproductos);
         $acobrar = 0;
         foreach ($solicitude->solicitudproductos as $key => $producto) {
-            $acobrar += $producto->tproducto->valorbruto * $producto->cantidad;
+            $acobrar += $producto->precio * $producto->cantidad;
             $productos .= "\n".$producto->tproducto->nombre. " Cantidad: ". $producto->cantidad;
         }
         $qr .= "\nCosto: $".$acobrar;

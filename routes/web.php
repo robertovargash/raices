@@ -108,6 +108,10 @@ Route::group(['middleware' => 'prevent-back-history'],function(){
         Route::put('solicitudproducto_edit_modal', 'SolicitudproductoController@editar')->name('solicitudproductos.editar');
         Route::delete('solicitudproducto_delete_modal', 'SolicitudproductoController@destroy')->name('solicitudproductos.destroy');
 
+        Route::resource('solicitudmateriaprimas','SolicitudmateriasprimaController');
+        Route::put('solicitudmateriaprima_edit_modal', 'SolicitudmateriasprimaController@editar')->name('solicitudmateriaprimas.editar');
+        Route::delete('solicitudmateriaprima_delete_modal', 'SolicitudmateriasprimaController@destroy')->name('solicitudmateriasprimas.destroy');
+
         Route::put('ordentrabajos_cancelar_modal', 'OrdentrabajoController@cancelar')->name('ordentrabajos.cancelar');
         Route::put('ordentrabajos_terminar_modal', 'OrdentrabajoController@terminar')->name('ordentrabajos.terminar');
         Route::get('ordentrabajos_pdf/{ot}', 'OrdentrabajoController@pdf')->name('ordentrabajos.pdf');

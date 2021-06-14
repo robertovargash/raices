@@ -77,7 +77,6 @@ class OfertaController extends Controller
                 "cantidad"=>0
             ]);
         }
-
         $almacenes = Almacen::all();
         foreach ($almacenes as $key => $almacen) {//por cada almacen que exista
             foreach ($almacen->almacenmercancias as $key => $almacenmercancia) {//por cada mercancia que tenga ese almacen
@@ -91,7 +90,6 @@ class OfertaController extends Controller
                 }
             }
         }
-
         return redirect()->route('ofertas.edit',$oferta)->with('success','Oferta creada');
     }
 
@@ -119,9 +117,7 @@ class OfertaController extends Controller
             $tproductos_id = Ofertaproducto::select('tproducto_id')->where('ofertaproductos.oferta_id','=',$oferta->id)->get();
             //Se buscan los productos del codificador producto
             $tproductos = Tproducto::all();
-            $productos = Tproducto::all();
-            //aqui se buscan los productos que esten en 'productos' pero no en la Oferta, con diff
-            // $tproductos = $tproductos->diff(Tproducto::whereIn('id', $tproductos_id)->get());
+            $productos = Tproducto::all();//estos 
 
             foreach ($tproductos as $tproducto) {
                 $hayDisp = true;
@@ -149,17 +145,19 @@ class OfertaController extends Controller
                                 $cantidadd = $tcantidad;
                             }
                         }
-                        //esto es para truncar y quitar el decimal, es la funcion "bcdiv"
-                        //creo el atributo temporal "cantidadd" para que aparezca solo en la vista
+                        
+                        //creo el atributo temporal "cantidadd"  para que aparezca solo en la vista
                         if (Ofertaproducto::where('ofertaproductos.oferta_id','=',$oferta->id)->where('ofertaproductos.tproducto_id','=',$tproducto->id)->count() > 0) {
                             $oferprod = Ofertaproducto::where('ofertaproductos.oferta_id','=',$oferta->id)->where('ofertaproductos.tproducto_id','=',$tproducto->id)->first();
                             $tproducto->existe = 1;
+                            //esto es para truncar y quitar el decimal, es la funcion "bcdiv"
                             $tproducto->cantidadd = bcdiv($cantidadd + $oferprod->cantidad, '1', 0);
+                            // dd($oferprod->cantidad);
                         }else{
                             $tproducto->existe = 0;
+                            //esto es para truncar y quitar el decimal, es la funcion "bcdiv"
                             $tproducto->cantidadd = bcdiv($cantidadd, '1', 0);
                         }
-
                     }
                 }else{
                     //creo el atributo temporal "cantidadd" para que aparezca solo en la vista
@@ -182,9 +180,7 @@ class OfertaController extends Controller
     public function update(Request $request, Oferta $oferta)
     {
         $oferta->update($request->all());
-
-        return redirect()->route('ofertas.index')
-                        ->with('success','Oferta modificada.');
+        return redirect()->route('ofertas.index')->with('success','Oferta modificada.');
     }
 
     /**
@@ -216,14 +212,11 @@ class OfertaController extends Controller
                 foreach ($ofertaproducto->tproducto->materiaprimas as $key => $materiaprima) {
                     if ($materiaprima->mercancia_id == $ofertamercancia->mercancia_id) {
                         $ofertamercancia->cantidad = $ofertamercancia->cantidad - ($materiaprima->cantidadnecesaria * $ofertaproducto->cantidad);
-
                     }
                 }
             }
             $ofertamercancia->save();
         }
-
-        return redirect()->route('ofertas.index')
-                        ->with('success','Oferta recalculada.');
+        return redirect()->route('ofertas.index')->with('success','Oferta recalculada.');
     }
 }

@@ -188,30 +188,51 @@
         <form id="addFactura" action="{{ route('solicitudes.store') }}" method="POST">
           @csrf
            <div class="row">
-            {{-- <div class="col-12">
-                <div class="form-group">
-                    <input type="checkbox" class="switch-input" value="1" name="pagada" id="pagada"><label for="pagada"> Pagada</label>
-                </div>
-            </div> --}}
             <div class="col-12">
                 <div class="form-group">
                     <strong>Pagada?</strong>
-                    <select id="selectpagada" class="form-control" name="pagada">
-                      <option value="0" selected>Sin pagar</option>
-                      <option value="1">Pagada</option>
-                    </select>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-check"></i></span>
+                      </div>
+                      <select id="selectpagada" class="form-control" name="pagada">
+                        <option value="0" selected>Sin pagar</option>
+                        <option value="1">Pagada</option>
+                      </select>
+                    </div>
+                   
                 </div>
             </div>
-            <div class="col-12" >
-                <div class="form-group">
-                    <strong>Cliente (*):</strong>
-                    <input type="text" name="cliente" id="cliente" class="form-control" placeholder="Cliente">
+            <div class="col-12 form-group">
+              <strong>Al pedido?</strong>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-check"></i></span>
+                    </div>
+                    <select id="selectpagada" class="form-control" name="alpedido">
+                      <option value="0" selected>No</option>
+                      <option value="1">Si</option>
+                    </select>
+                  </div>
+            </div>
+            <div class="col-12 form-group" >
+              <strong>Cliente (*):</strong>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fas fa-user"></i></span>
                 </div>
+                <input type="text" name="cliente" id="cliente" class="form-control" placeholder="Cliente">
               </div>
+            </div>
               <div class="col-12">
                 <div class="form-group">
                     <strong>Teléfono:</strong>
-                    <input type="text" name="telefono" class="form-control" placeholder="Teléfono">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                      </div>
+                      <input type="text" name="telefono" class="form-control" placeholder="Teléfono">
+                    </div>
                 </div>
             </div>
             <div class="col-12">

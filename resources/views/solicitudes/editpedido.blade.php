@@ -7,23 +7,13 @@
         <div class="col-sm-6">
           <div class="col-lg-12 margin-tb">
             <div class="pull-left">
-              <h2>Datos de la solicitud</h2>
+              <h2>Solicitud para pedidos personalizados</h2>
             </div>
             <div class="pull-right">
                 <a class="btn btn-primary" href="{{ route('solicitudes.index') }}"> Atrás</a>
             </div>
           </div>
-        </div>
-        @if ($errors->any())
-        <div class="alert alert-danger">
-          <strong>Vaya!</strong> Ocurrió un error.<br><br>
-          <ul>
-            @foreach ($errors->all() as $error)
-              <li>{{ $error }}</li>
-            @endforeach
-          </ul>
-        </div>
-        @endif
+        </div>        
       </div>
     </div><!-- /.container-fluid -->
   </div>
@@ -45,11 +35,6 @@
                         @csrf
                         @method('PUT')
                         <input type="hidden" value="{{ $solicitude->estado }}" name="estado" class="form-control">
-                        {{-- <div class="col-12">
-                            <div class="form-group">
-                                <input type="checkbox" class="switch-input" value="1" name="pagada" id="pagada" {{ $solicitude->pagada == true ? 'checked' : '' }}><label for="pagada"> Pagada</label>
-                            </div>
-                        </div> --}}
                         <div class="col-12">
                             <div class="form-group">
                                 <strong>Pagada?</strong>
@@ -134,19 +119,7 @@
                     <td>{{ $sproducto->observaciones }}</td>
                     <td>
                         @can('gestion_solicitud')
-                            <a class="btn btn-link editSolProducto text-primary"
-                            data-id="{{$sproducto->id}}"
-                            data-producto_id="{{$sproducto->tproducto->id}}"
-                            data-producto="{{$sproducto->tproducto->nombre}}"
-                            data-cantidad="{{$sproducto->cantidad}}"
-                            data-observaciones="{{$sproducto->observaciones}}"
-                            @foreach ($tproductos as $prod)
-                                        @if ($prod->id == $sproducto->tproducto->id)
-                                            producto-cantidadmax ="{{ $prod->cantidadd }}"
-                                            @break
-                                        @endif
-                            @endforeach>
-                            <b>Editar</b></a>
+                            <a a href="{{ route('solicitudproductos.edit',$sproducto) }}" class="btn btn-link text-primary">Editar</a>
                             <a class="btn btn-link deleteSolProducto text-danger" data-id="{{$sproducto->id}}"><b>Eliminar</b></a>
                         @endcan
                     </td>
@@ -237,15 +210,9 @@
                     </div>
                 </div>
                 <div class="col-12">
-                    <div class="form-group">
-                        <strong>Cantidad máxima:</strong>
-                        <input type="number" readonly id="cantidadmax" class="form-control" placeholder="Cantidad">
-                    </div>
-                </div>
-                <div class="col-12">
                   <div class="form-group">
                       <strong>Precio *:</strong>
-                      <input readonly type="number" name="precio" id="precio" class="form-control" placeholder="Precio">
+                      <input type="number" name="precio" id="precio" class="form-control" placeholder="Precio">
                   </div>
                 </div>
                 <div class="col-12">
@@ -259,61 +226,6 @@
                 </div>
             </div>
         </form>
-        </div>
-      </div>
-      <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-
-<div class="modal fade" id="modalEditproducto">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">Editando Producto</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <form id="editSolicitudProducto" action="{{ route('solicitudproductos.editar') }}" method="POST">
-                @csrf
-                @method('PUT')
-                 <div class="row">
-                    <input type="hidden" name="solicitude_id" value="{{ $solicitude->id }}" class="form-control">
-                    <input type="hidden" name="id" id="edit_rproducto_id">
-                    <input type="hidden" name="tproducto_id" class="form-control" id="edit_tproducto_id">
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Producto:</strong>
-                            <input type="text" disabled  id="edit_producto" class="form-control" placeholder="Cantidad">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Cantidad *:</strong>
-                            <input type="number" name="cantidad" id="edit_cantidad" class="form-control" placeholder="Cantidad">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Cantidad máxima:</strong>
-                            <input type="number" readonly id="editcantidadmax" class="form-control" placeholder="Cantidad">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <strong>Observaciones:</strong>
-                            <textarea class="form-control" style="height:150px" name="observaciones" id="edit_observaciones" placeholder="Observaciones"></textarea>
-                        </div>
-                    </div>
-                    <div class="col-12 text-center">
-                        <button type="submit" id="btnEdit" class="btn btn-success btn-block">Editar</button>
-                    </div>
-                </div>
-            </form>
-          </div>
         </div>
       </div>
       <!-- /.modal-content -->
@@ -335,22 +247,6 @@ $(document).on('click','.addProducto',function(){
     $('#modalAddproducto').modal('show');
 });
 
-$(document).on('click','.editSolProducto',function(){
-    var analisisID = $(this).attr('data-id');
-    var tproducto_id = $(this).attr('data-producto_id');
-    var producto = $(this).attr('data-producto');
-    var cantidad = $(this).attr('data-cantidad');
-    var observaciones=$(this).attr('data-observaciones');
-    var cantmax = $(this).attr('producto-cantidadmax');
-    $('#edit_rproducto_id').val(analisisID);
-    $('#edit_tproducto_id').val(tproducto_id);
-    $('#edit_producto').val(producto);
-    $('#edit_cantidad').val(cantidad);
-    $('#editcantidadmax').val(cantmax);
-    $('#edit_observaciones').val(observaciones);
-    $('#modalEditproducto').modal('show');
-});
-
 function refrescar_precio_cantidad() {
     let valorbruto = $('#selectProductos option:selected').attr('valor');
     let cantidad = $('#selectProductos option:selected').attr('cantidadd');
@@ -364,13 +260,7 @@ function refrescar_precio_cantidad() {
             $('#btnInsert').html('Insertando...');
             $('#addSolicitudProducto').submit();
             return true;
-    });
-    $('#btnEdit').click(function () {
-            $('#btnEdit').attr('disabled', true);
-            $('#btnEdit').html('Actualizando...');
-            $('#editSolicitudProducto').submit();
-            return true;
-    });
+    });    
     $('#addSolicitudProducto').validate({
       rules: {
         tproducto_id: {
@@ -378,9 +268,6 @@ function refrescar_precio_cantidad() {
         },
         cantidad: {
           required: true,
-          max: function() {
-                return parseFloat($("#cantidadmax").val());
-            },
           min: function() {
                 return 0;
             },
@@ -392,41 +279,6 @@ function refrescar_precio_cantidad() {
         },
         cantidad: {
           required: "Inserte la cantidad",
-          max: "debe ser menor o igual a la cantidad ofertada (en oferta: {0})",
-          min: "la cantidad ser mayor o igual que 0",
-        },
-      },
-      errorElement: 'span',
-      errorPlacement: function (error, element) {
-        error.addClass('invalid-feedback');
-        element.closest('.form-group').append(error);
-      },
-      highlight: function (element, errorClass, validClass) {
-        $(element).addClass('is-invalid');
-      },
-      unhighlight: function (element, errorClass, validClass) {
-        $(element).removeClass('is-invalid');
-      }
-    });
-    $('#editSolicitudProducto').validate({
-      rules: {
-        cantidad: {
-          required: true,
-          max: function() {
-                return parseFloat($("#editcantidadmax").val());
-            },
-          min: function() {
-                return 0;
-            },
-        },
-      },
-      messages: {
-        tproducto_id: {
-            required: "Debe seleccionar un producto",
-        },
-        cantidad: {
-          required: "Inserte la cantidad",
-          max: "debe ser menor o igual a la cantidad ofertada (en oferta: {0})",
           min: "la cantidad ser mayor o igual que 0",
         },
       },

@@ -128,8 +128,6 @@ class OfertaproductoController extends Controller
         $ofertaproducto_id=$request->input('id');
         $ofertaproducto = Ofertaproducto::find($ofertaproducto_id);
         $oferta = Oferta::find($ofertaproducto->oferta_id);
-
-
         foreach ($ofertaproducto->tproducto->materiaprimas as $key => $materiaprima) {
             $ofertamercancia = Ofertamercancia::where('oferta_id', $oferta->id)->where('mercancia_id', $materiaprima->mercancia_id)->first();
             $ofertamercancia->cantidad =  $ofertamercancia->cantidad + ($materiaprima->cantidadnecesaria * $ofertaproducto->cantidad);

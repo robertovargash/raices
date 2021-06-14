@@ -150,7 +150,7 @@
       </div>
       <div class="row">
         <div class="col-12">
-          <div class="card card-info">
+          <div class="card card-info" id="cardMercancias">
             <div class="card-header">
               <h3 class="card-title">Mercancías recepcionadas</h3>
               <div class="card-tools">
@@ -184,7 +184,7 @@
                     <td>{{ $recepcionmercancia->precio}} </td>
                     <td>
                         @can('gestion_recepcion')
-                            <a class="btn btn-link editRecepcionProducto text-primary" data-id="{{$recepcionmercancia->id}}" data-cantidad="{{$recepcionmercancia->cantidad}}" data-precio="{{$recepcionmercancia->precio}}">Editar</a>
+                            <a class="btn btn-link editRecepcionProducto text-primary" data-id="{{$recepcionmercancia->id}}" data-mercancia="{{$recepcionmercancia->mercancia->nombremercancia}}" data-cantidad="{{$recepcionmercancia->cantidad}}" data-precio="{{$recepcionmercancia->precio}}">Editar</a>
                             <a class="btn btn-link deleteRecepcionProducto text-danger" data-id="{{$recepcionmercancia->id}}">Eliminar</a>
                         @endcan
                     </td>
@@ -282,7 +282,7 @@
                     </div>
                   </div>
                   <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                          <button type="submit" class="btn btn-primary">Insertar</button>
+                          <button type="submit" id="btnInsertar" class="btn btn-success btn-block">Insertar</button>
                   </div>
               </div>
           </form>
@@ -314,6 +314,10 @@
                             <input type="hidden" name="id" id="id" class="form-control">
                         </div>
                     </div>
+                    <div class="col-12 form-group">
+                          <strong>Mercancía:</strong>
+                          <input type="text" readonly id="editmercancia"  class="form-control" placeholder="Mercancia">
+                    </div>
                     <div class="col-12">
                             <div class="form-group">
                                 <strong>Cantidad *:</strong>
@@ -327,7 +331,7 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                            <button type="submit" class="btn btn-success">Actualizar</button>
+                            <button type="submit"  class="btn btn-success btn-block">Actualizar</button>
                     </div>
                 </div>
             </form>
@@ -345,10 +349,12 @@ $(document).on('click','.editRecepcionProducto',function(){
     var id=$(this).attr('data-id');
     var cantidad=$(this).attr('data-cantidad');
     var precio=$(this).attr('data-precio');
+    var mercancia=$(this).attr('data-mercancia');
     $('#id').val(id);
     $('#modalEditRecepcionproducto').modal('show');
     $('#cantidad').val(cantidad);
     $('#precio').val(precio);
+    $('#editmercancia').val(mercancia);
 });
 
 $(document).on('click','.deleteRecepcionProducto',function(){
@@ -358,6 +364,12 @@ $(document).on('click','.deleteRecepcionProducto',function(){
 });
 
   $(document).ready(function () {
+    $('#btnInsertar').click(function () {
+            $('#btnInsertar').attr('disabled', true);
+            $('#btnInsertar').html('Insertando...');
+            $('#recepcionMercanciaData').submit();
+            return true;
+        });
     function elmenor(){
       return 0;
     };

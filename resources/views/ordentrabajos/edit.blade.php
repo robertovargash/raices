@@ -114,7 +114,7 @@
                     <tr>
                       @foreach ($otsolicitud->solicitude->solicitudproductos as $solicitudproducto)
                         @if ( $solicitudproducto->tproducto->id == $ordentrabajo->tproducto_id)
-                        <td>{{ $otsolicitud->solicitude->id }} {{ $otsolicitud->solicitude->cliente }} {{ $otsolicitud->solicitude->fechasolicitud }}</td>
+                        <td>{{ $otsolicitud->solicitude->numero }} {{ $otsolicitud->solicitude->cliente }} {{ $otsolicitud->solicitude->fechasolicitud }}</td>
                         <td><b>{{ $solicitudproducto->cantidad }} {{  $solicitudproducto->tproducto->nombre }}</b></td>
                         <td>
                             @if ($otsolicitud->terminado == 1)
@@ -163,22 +163,31 @@
                   <tr>
                     <th>Mat. prima</th>
                     <th>Cant. necesaria</th>
+                    <th>Precio</th>
+                    <th>Importe</th>
                   </tr>
                 </thead>
                 <tbody>
-                  @foreach ($ordentrabajo->tproducto->materiaprimas as $mprima)
+                  @foreach ($otsolicitudegroup as $elemento)
                   <tr>
-                    <td>{{ $mprima->mercancia->nombremercancia }}</td>
-                    <td><b>{{ $mprima->cantidadnecesaria * $ordentrabajo->cantidad }} {{ $mprima->mercancia->um }} </b> </td>
-                  </tr>
+                    <td>{{$elemento->nombremercancia}}</td>
+                    <td>{{$elemento->cantidadsumada}}</td>
+                    <td>{{$elemento->precio}}</td>
+                    <td>{{ round($elemento->importe,2)}}</td>
+                  </tr>                     
                   @endforeach
+                  {{-- @foreach ($ordentrabajo->otsolicitudes as $otsolicitud)                    
+                      @foreach ($otsolicitud->solicitude->solicitudmateriasprimas as $smprima)
+                      <tr>
+                        @if ( $smprima->solicitudproducto->tproducto->id == $ordentrabajo->tproducto_id)
+                        <td>{{ $otsolicitud->solicitude->numero }} {{ $otsolicitud->solicitude->cliente }}</td>
+                        <td><b>{{ $smprima->mercancia->nombremercancia }}</b></td>
+                        <td>{{ $smprima->cantidad }}</td>                      
+                        @endif
+                      </tr>
+                      @endforeach                    
+                  @endforeach--}}
                 </tbody>
-                <tfoot>
-                  <tr>
-                    <th>Mat. prima</th>
-                    <th>Cant. necesaria</th>
-                  </tr>
-                </tfoot>
             </table>
             </div>
           </div>

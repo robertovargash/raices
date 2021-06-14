@@ -152,14 +152,25 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach ($ot->tproducto->materiaprimas as $mprima)
+                    @foreach ($otsolicitudegroup as $elemento)
                     <tr>
-                        <td>{{ $mprima->mercancia->nombremercancia  }}</td>
-                        <td>{{ $mprima->cantidadnecesaria * $ot->cantidad }} {{$mprima->mercancia->um}}</td>
-                        <td>{{ $mprima->mercancia->precio}}</td>
-                        <td>{{ $mprima->cantidadnecesaria * $ot->cantidad * $mprima->mercancia->precio}}</td>
-                    </tr>
+                      <td>{{$elemento->nombremercancia}}</td>
+                      <td>{{$elemento->cantidadsumada}}</td>
+                      <td>{{$elemento->precio}}</td>
+                      <td>{{ round($elemento->importe,2)}}</td>
+                    </tr>                     
                     @endforeach
+                    {{-- @foreach ($ordentrabajo->otsolicitudes as $otsolicitud)                    
+                        @foreach ($otsolicitud->solicitude->solicitudmateriasprimas as $smprima)
+                        <tr>
+                          @if ( $smprima->solicitudproducto->tproducto->id == $ordentrabajo->tproducto_id)
+                          <td>{{ $otsolicitud->solicitude->numero }} {{ $otsolicitud->solicitude->cliente }}</td>
+                          <td><b>{{ $smprima->mercancia->nombremercancia }}</b></td>
+                          <td>{{ $smprima->cantidad }}</td>                      
+                          @endif
+                        </tr>
+                        @endforeach                    
+                    @endforeach--}}
                   </tbody>
             </table>
             <hr>

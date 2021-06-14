@@ -9,8 +9,9 @@ use App\Models\Vale;
 use App\Models\Valeitem;
 use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\Proveedor;
-
+use App\Models\Solicitudmateriasprima;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrdentrabajoController extends Controller
 {
@@ -67,7 +68,17 @@ class OrdentrabajoController extends Controller
     {
         $otsolicitudes = Otsolicitude::all();
         $title = "Datos de OT";
-        return view('ordentrabajos.show',compact('title','ordentrabajo','otsolicitudes'));
+        $otsolicitudegroup = DB::table('solicitudmateriasprimas')->join('mercancias','mercancias.id','solicitudmateriasprimas.mercancia_id')
+                            ->join('solicitudes','solicitudes.id','solicitudmateriasprimas.solicitude_id')
+                            ->join('solicitudproductos','solicitudproductos.id','solicitudmateriasprimas.solicitudproducto_id')
+                            ->join('tproductos','tproductos.id','solicitudproductos.tproducto_id')                           
+                            ->join('otsolicitudes','otsolicitudes.solicitude_id','solicitudes.id')
+                            ->join('ordentrabajos','ordentrabajos.id','otsolicitudes.ordentrabajo_id')
+                            ->where('tproductos.id',$ordentrabajo->tproducto_id)
+                            ->where('ordentrabajos.id',$ordentrabajo->id)
+                            ->groupBy('tproductos.nombre','mercancias.nombremercancia','mercancias.precio','ordentrabajos.numero')
+                            ->select(DB::raw('sum(solicitudmateriasprimas.cantidad) as cantidadsumada'),DB::raw('(sum(solicitudmateriasprimas.cantidad) * mercancias.precio) as importe'),'mercancias.nombremercancia','mercancias.precio')->get();
+        return view('ordentrabajos.show',compact('title','ordentrabajo','otsolicitudes','otsolicitudegroup'));
     }
 
     /**
@@ -80,7 +91,19 @@ class OrdentrabajoController extends Controller
     {
         if ( $ordentrabajo->estado == 0 || $ordentrabajo->estado == 1) {
             $title = "Editando OT";
-            return view('ordentrabajos.edit',compact('ordentrabajo','title'));
+            $otsolicitudegroup = DB::table('solicitudmateriasprimas')->join('mercancias','mercancias.id','solicitudmateriasprimas.mercancia_id')
+                            ->join('solicitudes','solicitudes.id','solicitudmateriasprimas.solicitude_id')
+                            ->join('solicitudproductos','solicitudproductos.id','solicitudmateriasprimas.solicitudproducto_id')
+                            ->join('tproductos','tproductos.id','solicitudproductos.tproducto_id')                           
+                            ->join('otsolicitudes','otsolicitudes.solicitude_id','solicitudes.id')
+                            ->join('ordentrabajos','ordentrabajos.id','otsolicitudes.ordentrabajo_id')
+                            ->where('tproductos.id',$ordentrabajo->tproducto_id)
+                            ->where('ordentrabajos.id',$ordentrabajo->id)
+                            ->groupBy('tproductos.nombre','mercancias.nombremercancia','mercancias.precio','ordentrabajos.numero')
+                            ->select(DB::raw('sum(solicitudmateriasprimas.cantidad) as cantidadsumada'),DB::raw('(sum(solicitudmateriasprimas.cantidad) * mercancias.precio) as importe'),'mercancias.nombremercancia','mercancias.precio')->get();
+
+            // dd($otsolicitudegroup);
+            return view('ordentrabajos.edit',compact('ordentrabajo','title','otsolicitudegroup'));
         }else {
             return redirect()->route('ordentrabajos.index')->with('error','La OT no se puede modificar');
         }
@@ -167,10 +190,20 @@ class OrdentrabajoController extends Controller
         // return view('vales.valepdf',compact('title','vale','mercancias'));
         $proveedor = Proveedor::first();
         $otsolicitudes = Otsolicitude::all();
+        $otsolicitudegroup = DB::table('solicitudmateriasprimas')->join('mercancias','mercancias.id','solicitudmateriasprimas.mercancia_id')
+                            ->join('solicitudes','solicitudes.id','solicitudmateriasprimas.solicitude_id')
+                            ->join('solicitudproductos','solicitudproductos.id','solicitudmateriasprimas.solicitudproducto_id')
+                            ->join('tproductos','tproductos.id','solicitudproductos.tproducto_id')                           
+                            ->join('otsolicitudes','otsolicitudes.solicitude_id','solicitudes.id')
+                            ->join('ordentrabajos','ordentrabajos.id','otsolicitudes.ordentrabajo_id')
+                            ->where('tproductos.id',$ot->tproducto_id)
+                            ->where('ordentrabajos.id',$ot->id)
+                            ->groupBy('tproductos.nombre','mercancias.nombremercancia','mercancias.precio','ordentrabajos.numero')
+                            ->select(DB::raw('sum(solicitudmateriasprimas.cantidad) as cantidadsumada'),DB::raw('(sum(solicitudmateriasprimas.cantidad) * mercancias.precio) as importe'),'mercancias.nombremercancia','mercancias.precio')->get();
          $pdf = PDF::setOptions([
             'logOutputFile' => storage_path('logs/log.htm'),
             'tempDir' => storage_path('logs/')
-        ])->loadView('ordentrabajos.pdf', compact('title','ot','otsolicitudes','proveedor'));
+        ])->loadView('ordentrabajos.pdf', compact('title','ot','otsolicitudes','proveedor','otsolicitudegroup'));
     	 return $pdf->setPaper('chart','landscape')->stream('OT'.$ot->numero.'.pdf');
     }
 }

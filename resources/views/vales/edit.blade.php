@@ -106,7 +106,7 @@
       </div>
       <div class="row">
         <div class="col-12">
-          <div class="card card-warning">
+          <div class="card card-warning" id="cardMercancias">
             <div class="card-header">
               <h3 class="card-title">Mercancías del vale</h3>
               <div class="card-tools">

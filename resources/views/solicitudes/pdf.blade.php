@@ -124,8 +124,8 @@
                     <tr>
                         <td>{{ $sproducto->tproducto->nombre }}</td>
                         <td>{{ $sproducto->cantidad }}</td>
-                        <td>{{ $sproducto->tproducto->valorbruto }}</td>
-                        <td>{{ $sproducto->tproducto->valorbruto * $sproducto->cantidad  }}</td>
+                        <td>{{ $sproducto->precio }}</td>
+                        <td>{{ $sproducto->precio * $sproducto->cantidad  }}</td>
                         <td>
                             @if ($sproducto->terminado == 1)
                                 Si

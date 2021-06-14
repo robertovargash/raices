@@ -128,6 +128,9 @@
                   <tr>
                     <th>Producto</th>
                     <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Importe</th>
+                    <th>Observaciones</th>
                     <th>Terminados</th>
                   </tr>
                 </thead>
@@ -136,6 +139,9 @@
                   <tr>
                     <td>{{ $sproducto->tproducto->nombre }}</td>
                     <td>{{ $sproducto->cantidad }}</td>
+                    <td>{{$sproducto->precio}}</td>
+                    <td>{{$sproducto->precio * $sproducto->cantidad}}</td>
+                    <td>{{ $sproducto->observaciones }}</td>
                     <td>
                         @if ($sproducto->terminado == 1)
                             <b class="text-success">Si</b>
@@ -150,6 +156,9 @@
                   <tr>
                     <th>Producto</th>
                     <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Importe</th>
+                    <th>Observaciones</th>
                     <th>Terminados</th>
                   </tr>
                 </tfoot>

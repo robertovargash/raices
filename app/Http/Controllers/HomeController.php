@@ -10,6 +10,7 @@ use App\Models\Solicitude;
 use App\Models\Tproducto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -40,26 +41,54 @@ class HomeController extends Controller
          $proveedor = Proveedor::first();
 
          $groups = DB::table('solicitudes')
-                  ->select('solicitudes.fechaentrega', DB::raw('sum(tproductos.valorbruto * solicitudproductos.cantidad) as total'))
+                  ->select(DB::raw("DATE_FORMAT(solicitudes.fechaentrega,'%d/%m/%y') as fechaentrega"), DB::raw('sum(solicitudproductos.precio * solicitudproductos.cantidad) as total'))
                   ->join('solicitudproductos', 'solicitudes.id', '=', 'solicitudproductos.solicitude_id')
                   ->join('tproductos', 'tproductos.id', '=', 'solicitudproductos.tproducto_id')
                   ->groupBy('fechaentrega')
-                  ->orderByDesc('fechaentrega')
-                  ->take(7)
-                //   ->where('solicitudes.estado','=',3)
+                  ->orderBy('fechaentrega')
+                   ->take(7)
+                   ->where('solicitudes.estado','=',3)
                   ->pluck('total', 'fechaentrega')->all();
+
+
+        $grupoMes = DB::table('solicitudes')
+                  ->select(DB::raw("DATE_FORMAT(solicitudes.fechaentrega,'%m/%y') as fecha"), DB::raw('sum(solicitudproductos.precio * solicitudproductos.cantidad) as total'))
+                  ->join('solicitudproductos', 'solicitudes.id', '=', 'solicitudproductos.solicitude_id')
+                   ->groupBy('fecha')
+                //    ->orderBy('fechaentrega')
+                   ->where('solicitudes.estado','=',3)
+                  ->pluck('total', 'fecha')->all();
+
+
+
+        // $meses = array("En","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic");
+        // $fecha = Carbon::parse($grupoMes);
+        // $mes = $meses[($fecha->format('n')) - 1];
+        // $inputs['Fecha'] = $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
         // Generate random colours for the groups
-        for ($i=0; $i<=count($groups); $i++) {
-                    $colours[] = '#' . substr(str_shuffle('ABCDEF0123456789'), 0, 6);
-                }
+        // for ($i=0; $i<=count($groups); $i++) {
+        //             $colours[] = '#' . substr(str_shuffle('ABCDEF0123456789'), 0, 6);
+        //         }
         // Prepare the data for returning with the view
-        $chart = new Chart();
-        $chart->labels = (array_keys($groups));
-        $chart->dataset = (array_values($groups));
-        $chart->colours = $colours;
+        $chartsemana = new Chart();
+        $chartsemana->labels = (array_keys($groups));
+        $chartsemana->dataset = (array_values($groups));
+
+        $chartmes = new Chart();
+        $chartmes->labels = (array_keys($grupoMes));
+        $chartmes->dataset = (array_values($grupoMes));
+        // $chart->colours = $colours;
+
+        $lastseven = DB::table('solicitudes')
+        ->select(DB::raw('sum(tproductos.valorbruto * solicitudproductos.cantidad) as total'))
+        ->join('solicitudproductos', 'solicitudes.id', '=', 'solicitudproductos.solicitude_id')
+        ->join('tproductos', 'tproductos.id', '=', 'solicitudproductos.tproducto_id')        
+         ->take(7)
+         ->where('solicitudes.estado','=',3)
+        ->pluck('total')->all();
 
 
-         return view('welcome',compact('title','count_tproductos','count_sol_proceso','count_sol_terminadas','count_OT_proceso','proveedor','chart'));
+         return view('welcome',compact('title','count_tproductos','count_sol_proceso','count_sol_terminadas','count_OT_proceso','proveedor','chartsemana','chartmes','lastseven'));
 
     }
 }
