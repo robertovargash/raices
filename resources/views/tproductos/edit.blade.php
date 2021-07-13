@@ -105,7 +105,9 @@
             </div>
             <div class="card-body">
               <div class="pull-left mb-2">
-                <button type="button" class="btn btn-info addProducto">Adicionar</button>
+                  @can('gestion_productos')
+                    <button type="button" class="btn btn-info addProducto">Adicionar</button>
+                  @endcan
               </div>
               <table id="tablaMateriasPrimas" class="table table-bordered table-striped">
                 <thead>

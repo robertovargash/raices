@@ -15,7 +15,7 @@ class MateriaprimaController extends Controller
      */
     function __construct()
     {
-        $this->middleware('permission:gestion_producto', ['only' => ['store','editar','destroy']]);
+        $this->middleware('permission:gestion_productos', ['only' => ['store','editar','destroy']]);
     }
     /**
      * Display a listing of the resource.
