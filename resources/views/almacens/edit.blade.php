@@ -167,10 +167,10 @@
                             <a href="{{ route('recepcions.imprimir',$recepcion) }}" class="btn btn-link text-info ">PDF</a>
                             @can('gestion_recepcion')
                                 <a href="{{ route('recepcions.edit',$recepcion) }}" class="btn btn-link text-primary" {{ $recepcion->activo != 0 ? 'hidden' : 'enabled'}}>{{-- <span class="fas fa-pencil-alt"> --}}Editar</a>
-                                <a class="btn btn-link deleteRecepcion text-danger" {{ $recepcion->activo != 0 ? 'hidden' : 'enabled'}} data-recepcion_id="{{$recepcion->id}}">Cancelar</a>
+                                <a class="btn btn-link deleteRecepcion text-danger" {{ $recepcion->activo != 0 ? 'hidden' : 'enabled'}} data-recepcion_id="{{$recepcion->id}}" data-recepcion_no="{{$recepcion->numero}}">Cancelar</a>
                             @endcan
                             @can('firma_recepcion')
-                                <a class="btn btn-link firmarRecepcion text-success" {{ $recepcion->activo != 0 ? 'hidden' : ''}} data-recepcion_id="{{$recepcion->id}}">Firmar</a>
+                                <a class="btn btn-link firmarRecepcion text-success" {{ $recepcion->activo != 0 ? 'hidden' : ''}} data-recepcion_id="{{$recepcion->id}}" data-recepcion_no="{{$recepcion->numero}}">Firmar</a>
                             @endcan
                         </div>
                   </td>
@@ -245,10 +245,10 @@
                         <a href="{{ route('vales.imprimir',$vale) }}" class="btn btn-link text-info ">PDF</a>
                         @can('gestion_vale')
                             <a href="{{ route('vales.edit',$vale) }}" class="btn btn-link text-primary " {{ $vale->activo != 0 ? 'hidden' : ''}}>Editar</a>
-                            <a class="btn btn-link deleteVale text-danger " {{ $vale->activo != 0 ? 'hidden' : ''}} data-vale_id="{{$vale->id}}">Cancelar</a>
+                            <a class="btn btn-link deleteVale text-danger " {{ $vale->activo != 0 ? 'hidden' : ''}} data-vale_id="{{$vale->id}}" data-vale_no="{{$vale->numero}}">Cancelar</a>
                         @endcan
                         @can('firma_vale')
-                            <a class="btn btn-link firmarVale text-success " {{ $vale->activo != 0 ? 'hidden' : ''}} data-vale_id="{{$vale->id}}">Firmar</a>
+                            <a class="btn btn-link firmarVale text-success " {{ $vale->activo != 0 ? 'hidden' : ''}} data-vale_id="{{$vale->id}}" data-vale_no="{{$vale->numero}}">Firmar</a>
                         @endcan
                     </td>
                   </tr>
@@ -408,7 +408,7 @@
             <div class="col-12 form-group">
               <strong>Factura:</strong>*
               <input type="text" name="factura" class="form-control" placeholder="Factura">
-            </div>            
+            </div>
             <div class="col-12 form-group">
               <strong>Entrega *:</strong>
               <input type="text" name="p_entrega" class="form-control" placeholder="Entrega">
@@ -421,7 +421,7 @@
                 <strong>Observaciones:</strong>
                 <textarea class="form-control" style="height:150px" name="observaciones" placeholder="Observaciones"></textarea>
               </div>
-              
+
             <div class="card" style="width: 100%">
               <div class="card-header">
                 <h3 class="card-title">Otros datos</h3>
@@ -813,28 +813,28 @@ $('#select2tipovale').on('change', function () { // your select change handler
 });
 
 $(document).on('click','.deleteRecepcion',function(){
-    var analisisID=$(this).attr('data-recepcion_id');
-    $('#recepcion_id').val(analisisID);
-    $('#modal-deleterecepcion-body').text('¿Desea cancelar la recepción '+ $(this).attr('data-recepcion_id') + '?');
+    var id=$(this).attr('data-recepcion_id');
+    $('#recepcion_id').val(id);
+    $('#modal-deleterecepcion-body').text('¿Desea cancelar la recepción '+ $(this).attr('data-recepcion_no') + '?');
     $('#deleteRecepcionModal').modal('show');
 });
 $(document).on('click','.deleteVale',function(){
-    var analisisID=$(this).attr('data-vale_id');
-    $('#vale_id').val(analisisID);
-    $('#modal-deletevale-body').text('¿Desea cancelar el vale '+ $(this).attr('data-vale_id') + '?');
+    var id=$(this).attr('data-vale_id');
+    $('#vale_id').val(id);
+    $('#modal-deletevale-body').text('¿Desea cancelar el vale '+ $(this).attr('data-vale_no') + '?');
     $('#deleteValeModal').modal('show');
 });
 
 $(document).on('click','.firmarRecepcion',function(){
-    var analisisID=$(this).attr('data-recepcion_id');
-    $('#recepcionn_id').val(analisisID);
-    $('#modal-firmarrecepcion-body').text('¿Desea firmar la recepción '+ $(this).attr('data-recepcion_id') + '?');
+    var id=$(this).attr('data-recepcion_id');
+    $('#recepcionn_id').val(id);
+    $('#modal-firmarrecepcion-body').text('¿Desea firmar la recepción '+ $(this).attr('data-recepcion_no') + '?');
     $('#firmarRecepcionModal').modal('show');
 });
 $(document).on('click','.firmarVale',function(){
-    var analisisID=$(this).attr('data-vale_id');
-    $('#modal-firmarvale-body').text('¿Desea firmar el vale '+ $(this).attr('data-vale_id') + '?');
-    $('#valee_id').val(analisisID);
+    var id=$(this).attr('data-vale_id');
+    $('#modal-firmarvale-body').text('¿Desea firmar el vale '+ $(this).attr('data-vale_no') + '?');
+    $('#valee_id').val(id);
     $('#firmarValeModal').modal('show');
 });
 

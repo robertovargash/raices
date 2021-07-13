@@ -73,7 +73,7 @@ class ValeController extends Controller
             $otsolicitudegroup = DB::table('solicitudmateriasprimas')->join('mercancias','mercancias.id','solicitudmateriasprimas.mercancia_id')
             ->join('solicitudes','solicitudes.id','solicitudmateriasprimas.solicitude_id')
             ->join('solicitudproductos','solicitudproductos.id','solicitudmateriasprimas.solicitudproducto_id')
-            ->join('tproductos','tproductos.id','solicitudproductos.tproducto_id')                           
+            ->join('tproductos','tproductos.id','solicitudproductos.tproducto_id')
             ->join('otsolicitudes','otsolicitudes.solicitude_id','solicitudes.id')
             ->join('ordentrabajos','ordentrabajos.id','otsolicitudes.ordentrabajo_id')
             ->where('tproductos.id',$valeNuevo->ordentrabajo->tproducto_id)
@@ -149,7 +149,7 @@ class ValeController extends Controller
             'logOutputFile' => storage_path('logs/log.htm'),
             'tempDir' => storage_path('logs/')
         ])->loadView('vales.pdf', compact('title','vale','proveedor','importetotal'));
-    	 return $pdf->setPaper('chart','landscape')->stream('Vale'.$vale->id.'.pdf');
+    	 return $pdf->setPaper('chart','landscape')->stream('Vale'.$vale->numero.'.pdf');
     }
 
     /**

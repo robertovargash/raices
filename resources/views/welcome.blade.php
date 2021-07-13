@@ -17,6 +17,24 @@
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
+        @can('gestion_almacen')
+        <div class="row">
+            <h5 class="col-12">Almacenes</h5>
+            <div class="col-lg-3 col-md-6 col-sm-12 col-xl-3">
+              <!-- small box -->
+              <div class="small-box bg-success">
+                <div class="inner">
+                  <h3>{{ $count_mercancias  }}</h3>
+                  <p>Mercancías en almacén</p>
+                </div>
+                <div class="icon">
+                  <i class="fas fa fa-warehouse"></i>
+                </div>
+                <a href="{{ route('existenciapdf')}}" class="small-box-footer">Ver <i class="fas fa-arrow-circle-right"></i></a>
+              </div>
+            </div>
+        </div>
+        @endcan
         <div class="row">
             <h5 class="col-12">Ofertas</h5>
             <div class="col-lg-3 col-md-6 col-sm-12 col-xl-3">

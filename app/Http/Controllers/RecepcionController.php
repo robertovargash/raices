@@ -154,7 +154,7 @@ class RecepcionController extends Controller
             'logOutputFile' => storage_path('logs/log.htm'),
             'tempDir' => storage_path('logs/')
         ])->loadView('recepciones.pdf', compact('title','recepcion','proveedor','importetotal'));
-    	 return $pdf->setPaper('chart','landscape')->stream('IRM'.$recepcion->id.'.pdf');
+    	 return $pdf->setPaper('chart','landscape')->stream('IRM'.$recepcion->numero.'.pdf');
     }
 
     public function firmar(Request $request)

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Almacen;
 use App\Models\Chart;
+use App\Models\Mercancia;
 use App\Models\Oferta;
 use App\Models\Ordentrabajo;
 use App\Models\Proveedor;
@@ -11,6 +13,8 @@ use App\Models\Tproducto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\URL;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class HomeController extends Controller
 {
@@ -19,9 +23,14 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    function __construct()
     {
-        // $this->middleware('auth');
+        //  $this->middleware('permission:role-list|role-create|role-edit|role-delete', ['only' => ['index','store']]);
+        //  $this->middleware('permission:role-create', ['only' => ['create','store']]);
+        //  $this->middleware('permission:role-edit', ['only' => ['edit','update']]);
+        //  $this->middleware('permission:role-delete', ['only' => ['destroy']]);+
+        // $this->middleware('permission:gestion_vale', ['only' => ['store','edit','update','show','cancelar']]);
+        // $this->middleware('permission:firma_vale', ['only' => ['firmar']]);
     }
 
     /**
@@ -39,6 +48,7 @@ class HomeController extends Controller
          $count_sol_terminadas = Solicitude::where('solicitudes.estado','=',2)->get()->count();
          $count_OT_proceso = Ordentrabajo::where('ordentrabajos.estado','=',1)->get()->count();
          $proveedor = Proveedor::first();
+         $count_mercancias = Mercancia::all()->count();
 
          $groups = DB::table('solicitudes')
                   ->select(DB::raw("DATE_FORMAT(solicitudes.fechaentrega,'%d/%m/%y') as fechaentrega"), DB::raw('sum(solicitudproductos.precio * solicitudproductos.cantidad) as total'))
@@ -59,17 +69,6 @@ class HomeController extends Controller
                    ->where('solicitudes.estado','=',3)
                   ->pluck('total', 'fecha')->all();
 
-
-
-        // $meses = array("En","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic");
-        // $fecha = Carbon::parse($grupoMes);
-        // $mes = $meses[($fecha->format('n')) - 1];
-        // $inputs['Fecha'] = $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
-        // Generate random colours for the groups
-        // for ($i=0; $i<=count($groups); $i++) {
-        //             $colours[] = '#' . substr(str_shuffle('ABCDEF0123456789'), 0, 6);
-        //         }
-        // Prepare the data for returning with the view
         $chartsemana = new Chart();
         $chartsemana->labels = (array_keys($groups));
         $chartsemana->dataset = (array_values($groups));
@@ -82,13 +81,25 @@ class HomeController extends Controller
         $lastseven = DB::table('solicitudes')
         ->select(DB::raw('sum(tproductos.valorbruto * solicitudproductos.cantidad) as total'))
         ->join('solicitudproductos', 'solicitudes.id', '=', 'solicitudproductos.solicitude_id')
-        ->join('tproductos', 'tproductos.id', '=', 'solicitudproductos.tproducto_id')        
+        ->join('tproductos', 'tproductos.id', '=', 'solicitudproductos.tproducto_id')
          ->take(7)
          ->where('solicitudes.estado','=',3)
         ->pluck('total')->all();
 
 
-         return view('welcome',compact('title','count_tproductos','count_sol_proceso','count_sol_terminadas','count_OT_proceso','proveedor','chartsemana','chartmes','lastseven'));
+         return view('welcome',compact('title', 'count_mercancias','count_tproductos','count_sol_proceso','count_sol_terminadas','count_OT_proceso','proveedor','chartsemana','chartmes','lastseven'));
 
+    }
+
+    public function existenciapdf(){
+
+        $title = "Existencia en almacenes";
+        $almacenes = Almacen::all();
+        $proveedor = Proveedor::first();
+        $pdf = PDF::setOptions([
+            'logOutputFile' => storage_path('logs/log.htm'),
+            'tempDir' => storage_path('logs/')
+        ])->loadView('almacens.existenciapdf', compact('title','almacenes','proveedor'));
+    	 return $pdf->setPaper('chart','landscape')->stream('Existencia_en_almacenes.pdf');
     }
 }

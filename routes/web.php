@@ -35,6 +35,7 @@ Route::group(['middleware' => 'prevent-back-history'],function(){
         Route::resource('users', UserController::class);
         Route::delete('user_delete_modal', 'UserController@destroy')->name('users.destroy');
         Route::get('/', 'HomeController@index')->name('home');
+        Route::get('/existenciapdf', 'HomeController@existenciapdf')->name('existenciapdf');
 
         Route::get('change-password', 'ChangePasswordController@index')->name('changemy.password');
         Route::post('change-password', 'ChangePasswordController@store')->name('change.password');
@@ -154,7 +155,7 @@ Route::group(['middleware' => 'prevent-back-history'],function(){
         Route::delete('facturaelemento_delete_modal', 'FacturaelementoController@eliminar')->name('facturaelementos.eliminar');
         Route::put('facturaelemento_edit_modal', 'FacturaelementoController@editar')->name('facturaelementos.editar');
         Route::resource('facturaelementos','FacturaelementoController');
-        
+
     });
 });
 
