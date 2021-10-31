@@ -30,17 +30,14 @@ trait RegistersUsers
     public function register(Request $request)
     {
         $this->validator($request->all())->validate();
-        ////Estas lineas comentadas pues no me convenia esta parte, basicamente se puede autenticar cualquiera y
-        ////registrar cualquiera
 
-        
-        // event(new Registered($user = $this->create($request->all())));
+        event(new Registered($user = $this->create($request->all())));
 
-        // $this->guard()->login($user);//ESTO LO COMENTE YO PORQUE NO ME CONVIENE EN MI CODIGO
+        $this->guard()->login($user);
 
-        // if ($response = $this->registered($request, $user)) {
-        //     return $response;
-        // }
+        if ($response = $this->registered($request, $user)) {
+            return $response;
+        }
 
         return $request->wantsJson()
                     ? new JsonResponse([], 201)
