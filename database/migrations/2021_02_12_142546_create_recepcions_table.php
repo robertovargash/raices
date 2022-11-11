@@ -37,7 +37,6 @@ class CreateRecepcionsTable extends Migration
             $table->string('transportista',250)->default("")->nullable();
             $table->string('tci',50)->default("")->nullable();
             $table->string('tchapa',50)->default("")->nullable();
-
             $table->string('proveedor',250)->default("");
             $table->date('fecha');
             $table->integer('activo')->default(0);

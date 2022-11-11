@@ -237,8 +237,6 @@
   <!-- /.modal-dialog -->
 </div>
 
-
-
 <div class="modal fade" id="modalAddRecepcionproducto">
   <div class="modal-dialog">
     <div class="modal-content">

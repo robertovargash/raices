@@ -21,7 +21,7 @@
                       @endforeach
                   </ul>
               </div>
-            @endif
+              @endif
               </div>              
             </div>           
           </div><!-- /.row -->         
